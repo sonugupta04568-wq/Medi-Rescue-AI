@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("stat-active").textContent = local.filter((e) => e.status === "ACTIVE").length;
     document.getElementById("stat-resolved").textContent = local.filter((e) => e.status !== "ACTIVE").length;
     document.getElementById("stat-ambulance").textContent = localStorage.getItem("mr_local_amb_requests") || 0;
-    document.getElementById("stat-hospitals").textContent = "8";
+    document.getElementById("stat-hospitals").textContent = HOSPITALS.length;
   }
 
   let list = await MR.api("/emergency?limit=6");

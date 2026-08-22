@@ -1,20 +1,13 @@
-const FALLBACK_HOSPITALS = [
-  { id: "h1", name: "Apollo Hospital", type: "Private Multispeciality", lat: 28.5384, lng: 77.2843, emergency: true, phone: "+91-11-71791090", address: "Sarita Vihar, New Delhi" },
-  { id: "h2", name: "AIIMS New Delhi", type: "Government Institute", lat: 28.5672, lng: 77.21, emergency: true, phone: "+91-11-26588500", address: "Ansari Nagar, New Delhi" },
-  { id: "h3", name: "Safdarjung Hospital", type: "Government", lat: 28.5686, lng: 77.2073, emergency: true, phone: "+91-11-26165060", address: "Safdarjung Enclave, New Delhi" },
-  { id: "h4", name: "Fortis Heart Institute", type: "Private Cardiac", lat: 28.5646, lng: 77.1637, emergency: true, phone: "+91-11-45822222", address: "Okhla Road, New Delhi" },
-  { id: "h5", name: "Max Super Speciality", type: "Private Multispeciality", lat: 28.5525, lng: 77.2585, emergency: true, phone: "+91-11-26515050", address: "Saket, New Delhi" },
-  { id: "h6", name: "BLK-Max Hospital", type: "Private Multispeciality", lat: 28.6435, lng: 77.1805, emergency: true, phone: "+91-11-30403040", address: "Pusa Road, New Delhi" },
-  { id: "h7", name: "Lady Hardinge Medical College", type: "Government", lat: 28.6285, lng: 77.2016, emergency: true, phone: "+91-11-23408100", address: "Connaught Place, New Delhi" },
-  { id: "h8", name: "City Care Clinic", type: "Private Clinic", lat: 28.6139, lng: 77.229, emergency: false, phone: "+91-11-40001000", address: "Barakhamba Road, New Delhi" }
-];
+let cityFilter = "All";
+let lastHospitals = [];
+let lastUserLoc = null;
 
 const Maps = {
   map: null,
   markers: [],
   userMarker: null,
 
-  init(elementId, center = [28.6139, 77.209], zoom = 12) {
+  init(elementId, center = [28.6139, 77.209], zoom = 11) {
     this.map = L.map(elementId).setView(center, zoom);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
@@ -33,7 +26,7 @@ const Maps = {
       iconAnchor: [9, 9]
     });
     this.userMarker = L.marker([lat, lng], { icon }).addTo(this.map).bindPopup("📍 You are here");
-    this.map.setView([lat, lng], 13);
+    this.map.setView([lat, lng], 12);
   },
 
   plotHospitals(hospitals) {
@@ -42,10 +35,14 @@ const Maps = {
     this.markers = hospitals.map((h) =>
       L.marker([h.lat, h.lng])
         .addTo(this.map)
-        .bindPopup(`<b>${h.name}</b><br>${h.type}<br>${h.emergency ? "🚨 Emergency available" : "No emergency"}<br>${h.distanceKm != null ? h.distanceKm + " km away" : ""}`)
+        .bindPopup(`<b>${h.name}</b><br>${h.city || ""} — ${h.type}<br>${h.emergency ? "🚨 Emergency available" : "No emergency"}<br>${h.distanceKm != null ? h.distanceKm + " km away" : ""}`)
     );
   }
 };
+
+function applyCityFilter(hospitals) {
+  return cityFilter === "All" ? hospitals : hospitals.filter((h) => h.city === cityFilter);
+}
 
 async function loadHospitals() {
   let userLoc = null;
@@ -55,22 +52,25 @@ async function loadHospitals() {
     MR.toast("📍 Location denied — showing demo area (New Delhi)", "warn");
     userLoc = { lat: 28.6139, lng: 77.209 };
   }
+  lastUserLoc = userLoc;
 
   Maps.setUser(userLoc.lat, userLoc.lng);
   document.getElementById("loc-status").textContent = `📍 Your location: ${userLoc.lat.toFixed(4)}, ${userLoc.lng.toFixed(4)}`;
 
-  let hospitals = await MR.api(`/hospitals?lat=${userLoc.lat}&lng=${userLoc.lng}&radius=50`);
+  let hospitals = await MR.api(`/hospitals?lat=${userLoc.lat}&lng=${userLoc.lng}&radius=60`);
   if (!hospitals || !hospitals.length) {
-    hospitals = FALLBACK_HOSPITALS
+    hospitals = HOSPITALS
       .map((h) => ({ ...h, distanceKm: MR.distanceKm(userLoc.lat, userLoc.lng, h.lat, h.lng) }))
       .sort((a, b) => (b.emergency === true) - (a.emergency === true) || a.distanceKm - b.distanceKm);
   }
 
-  Maps.plotHospitals(hospitals);
-  renderHospitalList(hospitals, userLoc);
+  lastHospitals = hospitals;
+  const visible = applyCityFilter(hospitals);
+  Maps.plotHospitals(visible);
+  renderHospitalList(visible, userLoc);
 }
 
-function renderHospitalList(hospitals, userLoc) {
+function renderHospitalList(hospitals) {
   const list = document.getElementById("hospital-list");
   document.getElementById("hospital-count").textContent = `${hospitals.length} hospitals found`;
   list.innerHTML = hospitals
@@ -87,10 +87,11 @@ function renderHospitalList(hospitals, userLoc) {
       <div class="chips" style="margin:.8rem 0">
         <span class="chip selected" style="cursor:default">📏 ${h.distanceKm != null ? h.distanceKm + " km" : "—"}</span>
         <span class="chip" style="cursor:default">🏷️ ${h.type}</span>
+        ${h.city ? `<span class="chip" style="cursor:default">📍 ${h.city}</span>` : ""}
       </div>
       <div style="display:flex;gap:.6rem;flex-wrap:wrap">
         <a class="btn btn-sm btn-primary" target="_blank" rel="noopener" href="${MR.directionsUrl(h.lat, h.lng)}">🧭 Get Directions</a>
-        <a class="btn btn-sm btn-teal" href="tel:${h.phone}">📞 Call</a>
+        ${h.phone ? `<a class="btn btn-sm btn-teal" href="tel:${h.phone}">📞 Call</a>` : ""}
         <a class="btn btn-sm btn-ghost" href="ambulance.html?hospital=${h.id}">🚑 Send Ambulance</a>
       </div>
     </div>`
@@ -104,4 +105,17 @@ document.addEventListener("DOMContentLoaded", () => {
   loadHospitals();
   const refreshBtn = document.getElementById("refresh-loc");
   if (refreshBtn) refreshBtn.addEventListener("click", loadHospitals);
+
+  document.querySelectorAll("#city-chips .chip").forEach((chip) =>
+    chip.addEventListener("click", () => {
+      document.querySelectorAll("#city-chips .chip").forEach((c) => c.classList.remove("selected"));
+      chip.classList.add("selected");
+      cityFilter = chip.dataset.city;
+      if (lastHospitals.length) {
+        const visible = applyCityFilter(lastHospitals);
+        Maps.plotHospitals(visible);
+        renderHospitalList(visible);
+      }
+    })
+  );
 });

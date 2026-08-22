@@ -5,6 +5,7 @@ const hospitalSchema = new mongoose.Schema(
     id: { type: String, required: true, unique: true },
     name: String,
     type: String,
+    city: String,
     lat: Number,
     lng: Number,
     emergency: Boolean,

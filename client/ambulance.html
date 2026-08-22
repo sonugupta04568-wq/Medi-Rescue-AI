@@ -12,7 +12,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=2" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css?v=3" />
   <script>
     (function () {
       var t = localStorage.getItem("mr_theme");
@@ -72,6 +73,11 @@
 
       <div class="stepper" id="amb-stepper" style="margin:1.4rem 0"></div>
 
+      <div class="map-wrap" style="margin:.4rem 0 1.2rem">
+        <div id="amb-map" role="application" aria-label="Live ambulance tracking map"></div>
+        <div id="amb-eta" class="badge badge-red" style="position:absolute;top:.7rem;left:.7rem;z-index:500;box-shadow:var(--shadow)">🛰️ Live tracking…</div>
+      </div>
+
       <div class="grid grid-2" style="gap:1rem;align-items:start">
         <div class="card sub-card">
           <h4 style="font-size:.95rem;margin-bottom:.7rem">👨‍✈️ Assigned Driver &amp; Unit</h4>
@@ -101,7 +107,9 @@
 
   <footer id="footer"></footer>
 
-  <script src="js/app.js"></script>
-  <script src="js/ambulance.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/hospitals-data.js?v=3"></script>
+  <script src="js/ambulance.js?v=3"></script>
 </body>
 </html>

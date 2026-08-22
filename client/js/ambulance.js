@@ -72,6 +72,7 @@ function showTracking(req) {
   section.style.display = "block";
   window.scrollTo({ top: 0, behavior: "smooth" });
   document.getElementById("req-id").textContent = req.id;
+  AmbMap.init(req);
   renderTracking(req);
 }
 
@@ -99,6 +100,8 @@ function renderTracking(req) {
         </div>`
     )
     .join("");
+
+  AmbMap.setStatus(req.status);
 }
 
 document.getElementById("advance-btn").addEventListener("click", async () => {
@@ -119,6 +122,130 @@ document.getElementById("advance-btn").addEventListener("click", async () => {
   renderTracking(currentRequest);
   if (currentRequest.status === "CLOSED") MR.toast("✅ Emergency closed. Get well soon!", "success");
 });
+
+/* ============ Live tracking map (simulated movement — no real GPS feed in MVP) ============ */
+const AmbMap = {
+  map: null,
+  ambMarker: null,
+  routeLine: null,
+  start: null,
+  pickup: null,
+  dest: null,
+  pos: null,
+  target: null,
+  timer: null,
+
+  init(req) {
+    this.start = {
+      lat: req.ambulance.lat != null ? req.ambulance.lat : 28.605,
+      lng: req.ambulance.lng != null ? req.ambulance.lng : 77.245
+    };
+    this.pickup = req.pickup || { lat: 28.6139, lng: 77.209 };
+    this.dest = this.nearestHospital(this.pickup);
+
+    if (!this.map) {
+      this.map = L.map("amb-map");
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+      }).addTo(this.map);
+    }
+
+    // Pickup marker (pulsing red)
+    const pickupIcon = L.divIcon({
+      className: "",
+      html: `<div style="width:18px;height:18px;border-radius:50%;background:#e63946;border:3px solid #fff;box-shadow:0 0 0 6px rgba(230,57,70,.3),0 2px 8px rgba(0,0,0,.4)"></div>`,
+      iconSize: [18, 18],
+      iconAnchor: [9, 9]
+    });
+    L.marker([this.pickup.lat, this.pickup.lng], { icon: pickupIcon })
+      .addTo(this.map)
+      .bindPopup("📍 Pickup point");
+
+    // Destination hospital marker
+    L.marker([this.dest.lat, this.dest.lng])
+      .addTo(this.map)
+      .bindPopup(`🏥 ${this.dest.name}`);
+
+    // Dashed route: unit → pickup → hospital
+    if (this.routeLine) this.routeLine.remove();
+    this.routeLine = L.polyline(
+      [
+        [this.start.lat, this.start.lng],
+        [this.pickup.lat, this.pickup.lng],
+        [this.dest.lat, this.dest.lng]
+      ],
+      { color: "#2a9d8f", weight: 3, dashArray: "8 10", opacity: 0.85 }
+    ).addTo(this.map);
+
+    // Ambulance marker
+    const ambIcon = L.divIcon({
+      className: "",
+      html: `<div style="width:34px;height:34px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:18px;box-shadow:0 3px 10px rgba(0,0,0,.35),0 0 0 4px rgba(230,57,70,.25)">🚑</div>`,
+      iconSize: [34, 34],
+      iconAnchor: [17, 17]
+    });
+    if (this.ambMarker) this.ambMarker.remove();
+    this.pos = { ...this.start };
+    this.ambMarker = L.marker([this.pos.lat, this.pos.lng], { icon: ambIcon })
+      .addTo(this.map)
+      .bindPopup(`🚑 ${req.ambulance.code} — ${req.ambulance.driver}`);
+
+    this.map.fitBounds(this.routeLine.getBounds().pad(0.2));
+
+    if (this.timer) clearInterval(this.timer);
+    this.timer = setInterval(() => this.tick(), 250);
+  },
+
+  nearestHospital(loc) {
+    return HOSPITALS.filter((h) => h.emergency)
+      .map((h) => ({ ...h, d: MR.distanceKm(loc.lat, loc.lng, h.lat, h.lng) }))
+      .sort((a, b) => a.d - b.d)[0];
+  },
+
+  // Where the ambulance should head for, per status.
+  statusTarget(status) {
+    if (status === "ASSIGNED") return this.lerp(this.start, this.pickup, 0.35);
+    if (status === "EN_ROUTE") return { ...this.pickup };
+    if (status === "ARRIVED") return this.lerp(this.pickup, this.dest, 0.6);
+    if (status === "HOSPITAL_REACHED" || status === "CLOSED") return { ...this.dest };
+    return { ...this.pickup };
+  },
+
+  setStatus(status) {
+    this.status = status;
+    this.target = this.statusTarget(status);
+    this.updateEta(status);
+  },
+
+  lerp(a, b, t) {
+    return { lat: a.lat + (b.lat - a.lat) * t, lng: a.lng + (b.lng - a.lng) * t };
+  },
+
+  tick() {
+    if (!this.target || !this.ambMarker) return;
+    this.pos = this.lerp(this.pos, this.target, 0.06);
+    this.ambMarker.setLatLng([this.pos.lat, this.pos.lng]);
+    this.updateEta(this.status);
+  },
+
+  updateEta(status) {
+    const el = document.getElementById("amb-eta");
+    if (!el || !this.target) return;
+    const pin = "position:absolute;top:.7rem;left:.7rem;z-index:500;box-shadow:var(--shadow)";
+    if (status === "CLOSED" || status === "HOSPITAL_REACHED") {
+      el.textContent = "✅ Trip complete";
+      el.className = "badge badge-green";
+      el.style.cssText = pin;
+      return;
+    }
+    const km = MR.distanceKm(this.pos.lat, this.pos.lng, this.target.lat, this.target.lng);
+    const mins = Math.max(1, Math.round((km / 40) * 60));
+    el.textContent = `🛰️ Live: ${km.toFixed(1)} km away • ETA ~${mins} min`;
+    el.className = "badge badge-red";
+    el.style.cssText = pin;
+  }
+};
 
 document.addEventListener("DOMContentLoaded", async () => {
   const last = JSON.parse(localStorage.getItem("mr_last_amb_request") || "null");

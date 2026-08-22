@@ -107,14 +107,17 @@ Emergency ke time har second matter karta hai — lekin aaj bhi users ko multipl
 
 ### 2. 🏥 Nearby Hospital Finder
 - Live Leaflet map (OpenStreetMap — **no API key needed**)
+- **29 real hospitals across Delhi & Noida** — Apollo, AIIMS, Max Saket, BLK-Max, Fortis (Shalimar Bagh / Vasant Kunj / Okhla / Noida), Moolchand, Venkateshwar, Aakash, CK Birla, Sri Balaji Action, Lok Nayak, G.B. Pant, GTB, DDU, Felix, Jaypee, Kailash, Metro, Yatharth, Sharda, Cloudnine, Neo, Prayag & more
+- City filter chips: All / Delhi / Noida
 - Distance-sorted hospitals, emergency availability badges
-- One-tap: Directions (Google Maps), Call, Send Ambulance
+- One-tap: Directions (Google Maps), Call (verified numbers only), Send Ambulance
 - Auto-fallback demo data if location denied
 
-### 3. 🚑 Ambulance Request System
+### 3. 🚑 Ambulance Request System + Live Map
 - Ambulance types: Basic / BLS / ALS / Neonatal
 - GPS pickup location → request → unit assigned
 - Driver details card + call button
+- **🛰️ Live tracking map**: animated ambulance marker moving along a dashed route (unit → pickup → nearest hospital) with a live distance/ETA badge
 - 5-step live tracking: `ASSIGNED → EN_ROUTE → ARRIVED → HOSPITAL_REACHED → CLOSED`
 
 ### 4. 🩸 Blood Bank Finder
