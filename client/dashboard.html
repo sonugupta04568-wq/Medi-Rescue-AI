@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — MediRescue AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><span class="logo">🚑</span>Medi<span class="accent">Rescue</span>&nbsp;AI</a>
+      <div class="nav-links">
+        <a href="emergency.html">🚨 SOS</a>
+        <a href="hospitals.html">🏥 Hospitals</a>
+        <a href="ambulance.html">🚑 Ambulance</a>
+        <a href="blood-bank.html">🩸 Blood</a>
+        <a href="assistant.html">🤖 AI Help</a>
+        <span id="nav-auth"></span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="page-head">
+      <h1>📊 Emergency Operations Dashboard</h1>
+      <p>Live overview of emergencies, ambulances and response activity.</p>
+    </div>
+
+    <div class="grid grid-4">
+      <div class="card stat-card">
+        <div class="stat-icon red">🚨</div>
+        <div><div class="stat-value" id="stat-active">—</div><div class="stat-label">Active Emergencies</div></div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-icon teal">✅</div>
+        <div><div class="stat-value" id="stat-resolved">—</div><div class="stat-label">Resolved</div></div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-icon navy">🚑</div>
+        <div><div class="stat-value" id="stat-ambulance">—</div><div class="stat-label">Ambulance Requests</div></div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-icon amber">🏥</div>
+        <div><div class="stat-value" id="stat-hospitals">—</div><div class="stat-label">Partner Hospitals</div></div>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:2.5rem;font-size:1.3rem">Quick Actions</h2>
+    <div class="quick-grid">
+      <a class="quick-card sos" href="emergency.html">
+        <span class="qc-icon">🚨</span>
+        <h3>Emergency SOS</h3>
+        <p>Trigger SOS, alert contacts, share live location.</p>
+      </a>
+      <a class="quick-card" href="hospitals.html">
+        <span class="qc-icon">🏥</span>
+        <h3>Find Hospitals</h3>
+        <p>Nearby hospitals with directions & emergency status.</p>
+      </a>
+      <a class="quick-card" href="ambulance.html">
+        <span class="qc-icon">🚑</span>
+        <h3>Request Ambulance</h3>
+        <p>Book BLS/ALS ambulance with live tracking.</p>
+      </a>
+      <a class="quick-card" href="blood-bank.html">
+        <span class="qc-icon">🩸</span>
+        <h3>Blood Availability</h3>
+        <p>Check blood group availability nearby.</p>
+      </a>
+      <a class="quick-card" href="assistant.html">
+        <span class="qc-icon">🤖</span>
+        <h3>AI Assistant</h3>
+        <p>Emergency guidance in Hindi & English.</p>
+      </a>
+      <a class="quick-card" href="emergency.html#emc">
+        <span class="qc-icon">👤</span>
+        <h3>Digital Emergency Card</h3>
+        <p>Manage your medical ID & contacts.</p>
+      </a>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:2.5rem;align-items:start">
+      <div class="card">
+        <h3 style="font-size:1.05rem;margin-bottom:.6rem">🕒 Recent Emergencies</h3>
+        <div id="recent-list" class="recent-list"><p style="color:var(--muted);font-size:.9rem">Loading…</p></div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:1.05rem;margin-bottom:.6rem">🚑 Fleet Status</h3>
+        <div id="fleet-list"><p style="color:var(--muted);font-size:.9rem">Loading…</p></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="fineprint">⚠️ MediRescue AI does not replace doctors or emergency services. In a life-threatening emergency, call 112 / 108 immediately. © 2026 MediRescue AI</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (!MR.requireAuth()) return;
+
+      const stats = await MR.api("/stats");
+      if (stats) {
+        document.getElementById("stat-active").textContent = stats.activeEmergencies;
+        document.getElementById("stat-resolved").textContent = stats.resolved;
+        document.getElementById("stat-ambulance").textContent = stats.ambulanceRequests;
+        document.getElementById("stat-hospitals").textContent = stats.hospitals;
+      } else {
+        const local = JSON.parse(localStorage.getItem("mr_local_emergencies") || "[]");
+        document.getElementById("stat-active").textContent = local.filter((e) => e.status === "ACTIVE").length;
+        document.getElementById("stat-resolved").textContent = local.filter((e) => e.status !== "ACTIVE").length;
+        document.getElementById("stat-ambulance").textContent = localStorage.getItem("mr_local_amb_requests") || 0;
+        document.getElementById("stat-hospitals").textContent = "8";
+      }
+
+      let list = await MR.api("/emergency?limit=6");
+      if (!list) list = JSON.parse(localStorage.getItem("mr_local_emergencies") || "[]");
+      const zone = document.getElementById("recent-list");
+      zone.innerHTML = list.length
+        ? list
+            .map(
+              (e) => `
+        <div class="list-item">
+          <div>
+            <b>${e.id}</b> — ${e.type || "Emergency"}
+            <div style="font-size:.8rem;color:var(--muted)">${MR.timeAgo(e.createdAt)} • ${e.location ? `📍 ${e.location.lat.toFixed(3)}, ${e.location.lng.toFixed(3)}` : "no GPS"}</div>
+          </div>
+          ${MR.priorityBadge(e.severity || "HIGH")}
+        </div>`
+            )
+            .join("")
+        : `<p style="color:var(--muted);font-size:.9rem">No emergencies yet. Stay safe! 🙏</p>`;
+
+      const fleet = await MR.api("/ambulance");
+      const fleetZone = document.getElementById("fleet-list");
+      fleetZone.innerHTML = fleet
+        ? fleet
+            .map(
+              (a) => `
+        <div class="list-item">
+          <div><b>${a.code}</b> — ${a.type}<div style="font-size:.8rem;color:var(--muted)">Driver: ${a.driver}</div></div>
+          <span class="badge badge-green">AVAILABLE</span>
+        </div>`
+            )
+            .join("")
+        : `<p style="color:var(--muted);font-size:.9rem">5 units ready (offline demo data)</p>`;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "medirescue-ai",
+  "version": "1.0.0",
+  "description": "MediRescue AI - Smart Emergency Healthcare & Response Platform",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js"
+  },
+  "keywords": ["emergency", "healthcare", "ambulance", "sos", "hackathon"],
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.0"
+  }
+}

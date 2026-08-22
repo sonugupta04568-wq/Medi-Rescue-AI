@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Register — MediRescue AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><span class="logo">🚑</span>Medi<span class="accent">Rescue</span>&nbsp;AI</a>
+      <div class="nav-links"><a href="index.html">🏠 Home</a><span id="nav-auth"></span></div>
+    </div>
+  </nav>
+
+  <div class="auth-wrap">
+    <div class="card auth-card">
+      <h2 style="text-align:center;margin-bottom:.3rem">🔐 Welcome</h2>
+      <p id="auth-hint" style="text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:1.2rem">Login to access your emergency profile & SOS history.</p>
+      <div class="auth-tabs">
+        <button id="tab-login" class="active" type="button">Login</button>
+        <button id="tab-register" type="button">Register</button>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" required minlength="6" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Login →</button>
+      </form>
+
+      <form id="register-form" style="display:none">
+        <div class="form-group">
+          <label for="reg-name">Full Name</label>
+          <input type="text" id="reg-name" placeholder="Your name" required />
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <input type="password" id="reg-password" placeholder="Min 6 characters" required minlength="6" />
+        </div>
+        <div class="grid grid-2" style="gap:.8rem">
+          <div class="form-group">
+            <label for="reg-phone">Phone</label>
+            <input type="tel" id="reg-phone" placeholder="+91-" />
+          </div>
+          <div class="form-group">
+            <label for="reg-blood">Blood Group</label>
+            <select id="reg-blood">
+              <option value="">Select</option>
+              <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+              <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-teal btn-block btn-lg">Create Account 🎉</button>
+      </form>
+
+      <div style="margin-top:1rem;text-align:center">
+        <button id="demo-login" class="btn btn-ghost btn-sm" type="button">⚡ Quick Demo Login (no server needed)</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

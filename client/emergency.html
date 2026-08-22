@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emergency SOS — MediRescue AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/emergency.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><span class="logo">🚑</span>Medi<span class="accent">Rescue</span>&nbsp;AI</a>
+      <div class="nav-links">
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="hospitals.html">🏥 Hospitals</a>
+        <a href="ambulance.html">🚑 Ambulance</a>
+        <a href="assistant.html">🤖 AI Help</a>
+        <span id="nav-auth"></span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="page-head">
+      <h1>🚨 Smart SOS System</h1>
+      <p>One press: location captured → emergency created → contacts alerted.</p>
+    </div>
+
+    <div class="grid grid-2" style="align-items:start">
+      <section class="sos-stage">
+        <button id="sos-btn" class="sos-btn">SOS<small>PRESS IN EMERGENCY</small></button>
+        <div class="sos-status">
+          <div class="big" id="sos-status-big">Ready to help you 24×7</div>
+          <div class="sub" id="sos-status-sub">Press the button — we'll handle the rest.</div>
+        </div>
+        <span class="loc-pill" id="loc-pill">📍 Location not captured yet</span>
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center">
+          <a href="tel:112" class="btn btn-sm btn-primary">📞 Call 112</a>
+          <a href="tel:108" class="btn btn-sm btn-navy">🚑 Call 108 Ambulance</a>
+          <a href="assistant.html" class="btn btn-sm btn-teal">🤖 AI Guidance</a>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3 style="font-size:1.05rem;margin-bottom:.8rem">⚡ Live Emergency Status</h3>
+        <div id="priority-banner" class="priority-banner critical" style="display:none;margin-bottom:1rem"></div>
+        <div class="timeline" id="sos-timeline">
+          <div class="timeline-item"><div class="t-label">Waiting for SOS trigger…</div><div class="t-time">Press the SOS button to begin</div></div>
+        </div>
+        <div id="post-sos-actions" style="display:none;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap">
+          <a href="ambulance.html" class="btn btn-sm btn-primary">🚑 Request Ambulance</a>
+          <a href="hospitals.html" class="btn btn-sm btn-navy">🏥 Nearby Hospitals</a>
+          <button class="btn btn-sm btn-teal" id="resolve-btn" type="button">✅ Mark Resolved</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:1.5rem;align-items:start">
+      <section class="card">
+        <h3 style="font-size:1.05rem;margin-bottom:.8rem">🧠 Emergency Severity Classification</h3>
+        <p style="font-size:.85rem;color:var(--muted);margin-bottom:.8rem">Select symptoms to get an <b>Emergency Priority Recommendation</b> (not a medical diagnosis).</p>
+        <div class="symptom-grid">
+          <label class="symptom-check"><input type="checkbox" value="Severe bleeding" />🩸 Severe bleeding</label>
+          <label class="symptom-check"><input type="checkbox" value="Chest pain" />❤️ Chest pain</label>
+          <label class="symptom-check"><input type="checkbox" value="Difficulty breathing" />😮‍💨 Difficulty breathing</label>
+          <label class="symptom-check"><input type="checkbox" value="Unconsciousness" />😵 Unconsciousness</label>
+          <label class="symptom-check"><input type="checkbox" value="Major accident" />💥 Major accident</label>
+          <label class="symptom-check"><input type="checkbox" value="Severe burn" />🔥 Severe burn</label>
+        </div>
+        <div style="display:flex;align-items:center;gap:.7rem;margin-top:1rem">
+          <span style="font-weight:700;font-size:.9rem;color:var(--navy)">Recommended priority:</span>
+          <span id="priority-preview"></span>
+        </div>
+        <div class="form-group" style="margin-top:1rem">
+          <label for="sos-type">Emergency Type (sent with SOS)</label>
+          <select id="sos-type"></select>
+        </div>
+      </section>
+
+      <section class="card" id="emc">
+        <h3 style="font-size:1.05rem;margin-bottom:.8rem">👤 Digital Emergency Card</h3>
+        <div class="emc-card" id="emc-card"></div>
+        <form id="profile-form" style="margin-top:1.2rem">
+          <div class="grid grid-2" style="gap:.8rem">
+            <div class="form-group"><label for="pf-name">Name</label><input type="text" id="pf-name" placeholder="Full name" /></div>
+            <div class="form-group"><label for="pf-age">Age</label><input type="number" id="pf-age" min="0" max="120" /></div>
+            <div class="form-group">
+              <label for="pf-blood">Blood Group</label>
+              <select id="pf-blood"><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select>
+            </div>
+            <div class="form-group"><label for="pf-allergies">Allergies</label><input type="text" id="pf-allergies" placeholder="e.g., Penicillin" /></div>
+          </div>
+          <div class="form-group"><label for="pf-notes">Emergency Notes</label><textarea id="pf-notes" rows="2" placeholder="Conditions, medications…"></textarea></div>
+          <button type="submit" class="btn btn-sm btn-navy">💾 Save Card</button>
+        </form>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:1.5rem">
+      <h3 style="font-size:1.05rem;margin-bottom:.8rem">👨‍👩‍👦 Emergency Contacts</h3>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:.9rem">These contacts are alerted with your live location when SOS is triggered.</p>
+      <div id="contacts-list"></div>
+      <form id="contact-form" class="grid grid-4" style="gap:.7rem;margin-top:1rem;align-items:end">
+        <div class="form-group" style="margin:0"><label for="ct-name">Name</label><input type="text" id="ct-name" placeholder="Contact name" /></div>
+        <div class="form-group" style="margin:0"><label for="ct-phone">Phone</label><input type="tel" id="ct-phone" placeholder="+91-" /></div>
+        <div class="form-group" style="margin:0"><label for="ct-relation">Relation</label><input type="text" id="ct-relation" placeholder="Family / Friend" /></div>
+        <button type="submit" class="btn btn-primary">➕ Add Contact</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="fineprint">⚠️ MediRescue AI does not replace doctors or emergency services. In a life-threatening emergency, call 112 / 108 immediately. © 2026 MediRescue AI</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/sos.js"></script>
+</body>
+</html>

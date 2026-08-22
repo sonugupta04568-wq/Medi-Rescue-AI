@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ambulance Request — MediRescue AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="index.html"><span class="logo">🚑</span>Medi<span class="accent">Rescue</span>&nbsp;AI</a>
+      <div class="nav-links">
+        <a href="emergency.html">🚨 SOS</a>
+        <a href="dashboard.html">📊 Dashboard</a>
+        <a href="hospitals.html">🏥 Hospitals</a>
+        <a href="blood-bank.html">🩸 Blood</a>
+        <a href="assistant.html">🤖 AI Help</a>
+        <span id="nav-auth"></span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="page-head">
+      <h1>🚑 Ambulance Request System</h1>
+      <p>Select ambulance type → share pickup location → get assigned unit with live status tracking.</p>
+    </div>
+
+    <section id="request-section" class="card">
+      <h3 style="font-size:1.05rem;margin-bottom:.8rem">1️⃣ Choose Ambulance Type</h3>
+      <div class="chips" id="amb-type-chips">
+        <button class="chip selected" data-type="">🆘 Any Available</button>
+        <button class="chip" data-type="Basic">🚐 Basic (Patient Transport)</button>
+        <button class="chip" data-type="BLS">🧰 BLS (Basic Life Support)</button>
+        <button class="chip" data-type="ALS">💉 ALS (Advanced Life Support)</button>
+        <button class="chip" data-type="Neonatal">👶 Neonatal</button>
+      </div>
+
+      <h3 style="font-size:1.05rem;margin:1.4rem 0 .8rem">2️⃣ Emergency Type & Pickup Location</h3>
+      <div class="grid grid-2" style="gap:.9rem">
+        <div class="form-group">
+          <label for="em-type">Emergency Type</label>
+          <select id="em-type">
+            <option>🚨 Accident</option>
+            <option>❤️ Heart Emergency</option>
+            <option>🩸 Blood Loss</option>
+            <option>🔥 Burn Injury</option>
+            <option>🧠 Stroke</option>
+            <option>🤕 Other Emergency</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Pickup Location</label>
+          <button id="use-gps" class="btn btn-teal btn-block" type="button">📍 Use My Current GPS Location</button>
+          <p id="pickup-status" style="font-size:.82rem;color:var(--muted);margin-top:.35rem">No location set — required to dispatch.</p>
+        </div>
+      </div>
+
+      <button id="request-btn" class="btn btn-primary btn-lg btn-block" style="margin-top:.6rem">🚨 Request Ambulance Now</button>
+    </section>
+
+    <section id="tracking-section" class="card" style="display:none;margin-top:1.5rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap">
+        <h3 style="font-size:1.05rem">🛰️ Live Tracking — <span id="req-id"></span></h3>
+        <span class="badge badge-red" id="req-status-badge">ASSIGNED</span>
+      </div>
+
+      <div class="stepper" id="amb-stepper" style="margin:1.4rem 0"></div>
+
+      <div class="grid grid-2" style="gap:1rem;align-items:start">
+        <div class="card" style="box-shadow:none;background:#f8fafd">
+          <h4 style="font-size:.95rem;margin-bottom:.7rem">👨‍✈️ Assigned Driver & Unit</h4>
+          <div class="list-item"><span><b id="drv-name">—</b><br/><small style="color:var(--muted)" id="drv-phone">—</small></span><span class="badge badge-navy" id="drv-unit">—</span></div>
+          <div style="display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap">
+            <a id="call-driver" href="#" class="btn btn-sm btn-teal">📞 Call Driver</a>
+            <a id="track-map" href="#" target="_blank" rel="noopener" class="btn btn-sm btn-navy">🗺️ Open Route</a>
+          </div>
+        </div>
+        <div class="card" style="box-shadow:none;background:#f8fafd">
+          <h4 style="font-size:.95rem;margin-bottom:.7rem">📋 Trip Timeline</h4>
+          <div class="timeline" id="amb-timeline"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap">
+        <button id="advance-btn" class="btn btn-primary" type="button">⏭️ Advance Status (demo)</button>
+        <a href="hospitals.html" class="btn btn-ghost">🏥 Choose Destination Hospital</a>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:1.5rem">
+      <h3 style="font-size:1.05rem;margin-bottom:.8rem">🚑 Available Fleet</h3>
+      <div id="fleet-list"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="fineprint">⚠️ MediRescue AI does not replace doctors or emergency services. In a life-threatening emergency, call 108 immediately. © 2026 MediRescue AI</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    const FLOW = ["ASSIGNED", "EN_ROUTE", "ARRIVED", "HOSPITAL_REACHED", "CLOSED"];
+    const FLOW_LABELS = { ASSIGNED: "Assigned", EN_ROUTE: "En Route", ARRIVED: "Arrived", HOSPITAL_REACHED: "Hospital Reached", CLOSED: "Closed" };
+    let selectedType = "";
+    let pickup = null;
+    let currentRequest = null;
+
+    document.querySelectorAll("#amb-type-chips .chip").forEach((chip) =>
+      chip.addEventListener("click", () => {
+        document.querySelectorAll("#amb-type-chips .chip").forEach((c) => c.classList.remove("selected"));
+        chip.classList.add("selected");
+        selectedType = chip.dataset.type;
+      })
+    );
+
+    document.getElementById("use-gps").addEventListener("click", async () => {
+      const status = document.getElementById("pickup-status");
+      status.textContent = "📡 Detecting…";
+      try {
+        pickup = await MR.getUserLocation();
+        status.textContent = `📍 Pickup set: ${pickup.lat.toFixed(4)}, ${pickup.lng.toFixed(4)}`;
+        MR.toast("📍 Pickup location captured", "success");
+      } catch {
+        pickup = { lat: 28.6139, lng: 77.209 };
+        status.textContent = "⚠️ GPS denied — using city-center demo location";
+      }
+    });
+
+    document.getElementById("request-btn").addEventListener("click", async () => {
+      if (!pickup) {
+        MR.toast("📍 Set pickup location first!", "warn");
+        return;
+      }
+      const btn = document.getElementById("request-btn");
+      btn.disabled = true;
+      btn.textContent = "🚨 Requesting…";
+      const payload = {
+        type: selectedType || null,
+        emergencyType: document.getElementById("em-type").value,
+        pickup
+      };
+      let req = await MR.api("/ambulance/request", { method: "POST", body: JSON.stringify(payload) });
+      if (!req) {
+        const units = [
+          { id: "a1", code: "MR-101", type: "Basic", driver: "Ramesh Kumar", phone: "+91-9810010101", lat: 28.615, lng: 77.21 },
+          { id: "a2", code: "MR-205", type: "ALS", driver: "Sunil Yadav", phone: "+91-9810020202", lat: 28.605, lng: 77.245 }
+        ];
+        const unit = units.find((u) => !selectedType || u.type === selectedType) || units[0];
+        req = {
+          id: "REQ-" + Date.now(),
+          ambulance: unit,
+          emergencyType: payload.emergencyType,
+          pickup,
+          status: "ASSIGNED",
+          etaMinutes: 8,
+          createdAt: new Date().toISOString(),
+          timeline: [{ status: "ASSIGNED", at: new Date().toISOString(), label: `${unit.code} assigned — driver ${unit.driver}` }]
+        };
+        localStorage.setItem("mr_local_amb_request", JSON.stringify(req));
+        localStorage.setItem("mr_local_amb_requests", String(Number(localStorage.getItem("mr_local_amb_requests") || 0) + 1));
+      }
+      currentRequest = req;
+      localStorage.setItem("mr_last_amb_request", JSON.stringify(req));
+      showTracking(req);
+      MR.toast(`🚑 ${req.ambulance.code} assigned! ETA ~${req.etaMinutes} min`, "success");
+      btn.disabled = false;
+      btn.textContent = "🚨 Request Ambulance Now";
+    });
+
+    function showTracking(req) {
+      document.getElementById("request-section").style.display = "none";
+      const section = document.getElementById("tracking-section");
+      section.style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      document.getElementById("req-id").textContent = req.id;
+      renderTracking(req);
+    }
+
+    function renderTracking(req) {
+      const badge = document.getElementById("req-status-badge");
+      badge.textContent = FLOW_LABELS[req.status] || req.status;
+
+      const stepper = document.getElementById("amb-stepper");
+      const idx = FLOW.indexOf(req.status);
+      stepper.innerHTML = FLOW.map((s, i) => `<div class="step ${i < idx ? "done" : i === idx ? "active" : ""}">${FLOW_LABELS[s]}</div>`).join("");
+
+      document.getElementById("drv-name").textContent = req.ambulance.driver;
+      document.getElementById("drv-phone").textContent = req.ambulance.phone;
+      document.getElementById("drv-unit").textContent = `${req.ambulance.code} • ${req.ambulance.type}`;
+      document.getElementById("call-driver").href = "tel:" + req.ambulance.phone;
+      const dest = req.pickup || { lat: 28.61, lng: 77.21 };
+      document.getElementById("track-map").href = MR.directionsUrl(dest.lat, dest.lng);
+
+      document.getElementById("amb-timeline").innerHTML = (req.timeline || [])
+        .map(
+          (t, i, arr) => `
+        <div class="timeline-item ${i === arr.length - 1 ? "" : "done"}">
+          <div class="t-label">${t.label}</div>
+          <div class="t-time">${new Date(t.at).toLocaleTimeString()}</div>
+        </div>`
+        )
+        .join("");
+    }
+
+    document.getElementById("advance-btn").addEventListener("click", async () => {
+      if (!currentRequest) return;
+      let updated = await MR.api(`/ambulance/request/${currentRequest.id}/status`, { method: "PATCH" });
+      if (!updated) {
+        const idx = FLOW.indexOf(currentRequest.status);
+        if (idx >= FLOW.length - 1) return;
+        const next = FLOW[idx + 1];
+        const labels = { EN_ROUTE: "Ambulance en route to pickup", ARRIVED: "Ambulance arrived at pickup", HOSPITAL_REACHED: "Patient reached hospital", CLOSED: "Emergency closed" };
+        currentRequest.status = next;
+        currentRequest.timeline.push({ status: next, at: new Date().toISOString(), label: labels[next] });
+        updated = currentRequest;
+        localStorage.setItem("mr_last_amb_request", JSON.stringify(updated));
+      } else {
+        currentRequest = updated;
+      }
+      renderTracking(currentRequest);
+      if (currentRequest.status === "CLOSED") MR.toast("✅ Emergency closed. Get well soon!", "success");
+    });
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const last = JSON.parse(localStorage.getItem("mr_last_amb_request") || "null");
+      if (last && last.status !== "CLOSED") {
+        currentRequest = last;
+        showTracking(last);
+      }
+
+      let fleet = await MR.api("/ambulance");
+      const zone = document.getElementById("fleet-list");
+      zone.innerHTML = fleet && fleet.length
+        ? fleet
+            .map(
+              (a) => `
+          <div class="list-item">
+            <div><b>${a.code}</b> — ${a.type}<div style="font-size:.8rem;color:var(--muted)">Driver: ${a.driver} • 📞 ${a.phone}</div></div>
+            <span class="badge badge-green">AVAILABLE</span>
+          </div>`
+            )
+            .join("")
+        : `<p style="color:var(--muted);font-size:.9rem">Fleet info unavailable offline — request will still be simulated.</p>`;
+    });
+  </script>
+</body>
+</html>
