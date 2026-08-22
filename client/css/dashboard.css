@@ -12,7 +12,9 @@
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 .quick-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--primary-light); }
-.quick-card .qc-icon { font-size: 1.9rem; }
+.quick-card .qc-icon { font-size: 1.9rem; color: var(--primary); display: inline-flex; }
+.quick-card .qc-icon svg { width: 30px; height: 30px; }
+.quick-card:not(.sos) .qc-icon { color: var(--teal-dark); }
 .quick-card h3 { font-size: 1rem; }
 .quick-card p { font-size: 0.84rem; color: var(--muted); }
 .quick-card.sos { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border: none; color: #fff; }

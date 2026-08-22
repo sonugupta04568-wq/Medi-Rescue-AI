@@ -27,10 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
       MR.toast("✅ Welcome back, " + res.user.name, "success");
       setTimeout(() => (window.location.href = "dashboard.html"), 600);
     } else {
+      // Offline fallback: verify against a SHA-256 hash — never store plaintext passwords.
       const known = JSON.parse(localStorage.getItem("mr_local_users") || "{}");
-      if (known[email] && known[email] === password) {
+      const hash = await MR.sha256(password);
+      if (known[email] && known[email].hash === hash) {
         localStorage.setItem("mr_demo", "1");
-        localStorage.setItem("mr_user", JSON.stringify({ name: email.split("@")[0], email }));
+        localStorage.setItem("mr_user", JSON.stringify({ name: known[email].name || email.split("@")[0], email }));
         window.location.href = "dashboard.html";
       } else {
         MR.toast("⚠️ Server unreachable. Use demo login: demo@medirescue.ai / demo123", "warn");
@@ -58,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => (window.location.href = "dashboard.html"), 600);
     } else {
       const known = JSON.parse(localStorage.getItem("mr_local_users") || "{}");
-      known[payload.email] = payload.password;
+      known[payload.email] = { name: payload.name, hash: await MR.sha256(payload.password) };
       localStorage.setItem("mr_local_users", JSON.stringify(known));
       delete payload.password;
       localStorage.setItem("mr_demo", "1");

@@ -2,26 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MediRescue AI — Smart Emergency Healthcare & Response Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MediRescue AI — Smart Emergency Healthcare &amp; Response Platform</title>
+  <meta name="description" content="One-tap SOS with GPS, live ambulance tracking, nearby hospital finder, blood bank availability and AI emergency guidance — all in seconds." />
+  <meta name="theme-color" content="#14213d" />
+  <meta property="og:title" content="MediRescue AI — Smart Emergency Response Platform" />
+  <meta property="og:description" content="Fast Help. Smart Decisions. Saved Lives. One-tap SOS, ambulance booking, hospital & blood bank finder, AI triage assistant." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="manifest" href="manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=2" />
+  <script>
+    (function () {
+      var t = localStorage.getItem("mr_theme");
+      if (!t && window.matchMedia) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t || "light");
+    })();
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"MediRescue AI","applicationCategory":"HealthApplication","operatingSystem":"Web","description":"Smart emergency healthcare and response platform with one-tap SOS, ambulance booking, hospital and blood bank finder, and AI triage."}
+  </script>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container nav-inner">
-      <a class="brand" href="index.html"><span class="logo">🚑</span>Medi<span class="accent">Rescue</span>&nbsp;AI</a>
-      <div class="nav-links">
-        <a href="emergency.html">🚨 SOS</a>
-        <a href="hospitals.html">🏥 Hospitals</a>
-        <a href="ambulance.html">🚑 Ambulance</a>
-        <a href="blood-bank.html">🩸 Blood</a>
-        <a href="assistant.html">🤖 AI Help</a>
-        <span id="nav-auth"></span>
-      </div>
-    </div>
-  </nav>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav id="navbar"></nav>
 
   <header class="hero">
     <div class="container hero-grid">
@@ -43,56 +52,56 @@
           <li><span class="dot">1</span> Press 🚨 SOS — GPS location captured instantly</li>
           <li><span class="dot">2</span> Emergency contacts alerted with live location</li>
           <li><span class="dot">3</span> Nearby hospitals ranked by distance</li>
-          <li><span class="dot">4</span> Ambulance requested & assigned with tracking</li>
+          <li><span class="dot">4</span> Ambulance requested &amp; assigned with tracking</li>
           <li><span class="dot">5</span> AI assistant guides you until help arrives</li>
         </ul>
       </div>
     </div>
   </header>
 
-  <main class="container" style="padding:3.5rem 0">
+  <main class="container" id="main" style="padding:3.5rem 0">
     <h2 class="section-title">Everything you need in an emergency</h2>
     <p class="section-sub">Seven smart modules working together when every second counts.</p>
     <div class="grid grid-4">
       <div class="card card-hover">
-        <div class="feature-icon">🚨</div>
-        <h3 style="font-size:1rem">Smart SOS System</h3>
-        <p style="font-size:.88rem;color:var(--muted)">One-tap SOS with GPS capture, emergency ID generation and contact alert workflow.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12a5 5 0 0 1 10 0v6H7v-6Z"/><path d="M5 20h14"/><path d="M12 2v2"/><path d="M4.9 5.6 6.3 7"/><path d="M19.1 5.6 17.7 7"/><path d="M9 12a3 3 0 0 1 6 0"/></svg></div>
+        <h3 class="feature-title">Smart SOS System</h3>
+        <p class="feature-text">One-tap SOS with GPS capture, emergency ID generation and contact alert workflow.</p>
       </div>
       <div class="card card-hover">
-        <div class="feature-icon t">🏥</div>
-        <h3 style="font-size:1rem">Hospital Finder</h3>
-        <p style="font-size:.88rem;color:var(--muted)">Live map of nearby hospitals with distance, emergency availability, directions & call.</p>
+        <div class="feature-icon t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v4M10 8h4"/><path d="M14.5 4h-5l-.5 2h6l-.5-2Z"/><path d="M5 10h14v10H5z"/><path d="M9 20v-4h6v4"/></svg></div>
+        <h3 class="feature-title">Hospital Finder</h3>
+        <p class="feature-text">Live map of nearby hospitals with distance, emergency availability, directions &amp; call.</p>
       </div>
       <div class="card card-hover">
-        <div class="feature-icon n">🚑</div>
-        <h3 style="font-size:1rem">Ambulance Booking</h3>
-        <p style="font-size:.88rem;color:var(--muted)">Request Basic/BLS/ALS ambulances, get driver details and live status tracking.</p>
+        <div class="feature-icon n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h11v8H3z"/><path d="M14 11h4l3 3v2h-7v-5Z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><path d="M6 11h4M8 9v4"/></svg></div>
+        <h3 class="feature-title">Ambulance Booking</h3>
+        <p class="feature-text">Request Basic/BLS/ALS ambulances, get driver details and live status tracking.</p>
       </div>
       <div class="card card-hover">
-        <div class="feature-icon a">🩸</div>
-        <h3 style="font-size:1rem">Blood Bank Finder</h3>
-        <p style="font-size:.88rem;color:var(--muted)">Check blood group availability across nearby blood banks instantly.</p>
+        <div class="feature-icon a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7 6.4 9.4a7 7 0 1 0 11.2 0L12 2.7Z"/></svg></div>
+        <h3 class="feature-title">Blood Bank Finder</h3>
+        <p class="feature-text">Check blood group availability across nearby blood banks instantly.</p>
       </div>
       <div class="card card-hover">
-        <div class="feature-icon">🤖</div>
-        <h3 style="font-size:1rem">AI Emergency Assistant</h3>
-        <p style="font-size:.88rem;color:var(--muted)">Describe the emergency in Hindi or English — get instant first-aid guidance.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M9 4h6"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg></div>
+        <h3 class="feature-title">AI Emergency Assistant</h3>
+        <p class="feature-text">Describe the emergency in Hindi or English — get instant first-aid guidance.</p>
       </div>
       <div class="card card-hover">
-        <div class="feature-icon t">🧠</div>
-        <h3 style="font-size:1rem">Severity Classification</h3>
-        <p style="font-size:.88rem;color:var(--muted)">Symptom-based priority recommendation: LOW → MEDIUM → HIGH → CRITICAL.</p>
+        <div class="feature-icon t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"/><path d="M12 13l4-4"/></svg></div>
+        <h3 class="feature-title">Severity Classification</h3>
+        <p class="feature-text">Symptom-based priority recommendation: LOW → MEDIUM → HIGH → CRITICAL.</p>
       </div>
       <div class="card card-hover">
-        <div class="feature-icon n">👤</div>
-        <h3 style="font-size:1rem">Digital Emergency Card</h3>
-        <p style="font-size:.88rem;color:var(--muted)">Blood group, allergies and contacts available to responders in one scan.</p>
+        <div class="feature-icon n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-5 8-5s6.5 1 8 5"/></svg></div>
+        <h3 class="feature-title">Digital Emergency Card</h3>
+        <p class="feature-text">Blood group, allergies and contacts available to responders in one scan.</p>
       </div>
-      <div class="card card-hover" style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));border:none">
-        <div class="feature-icon" style="background:rgba(255,255,255,.18)">⚡</div>
-        <h3 style="font-size:1rem;color:#fff">Built for Hackathons</h3>
-        <p style="font-size:.88rem;color:#ffd4d7">Full-stack MVP: Node.js + Express + MongoDB-ready + offline demo mode.</p>
+      <div class="card card-hover feature-cta">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg></div>
+        <h3 class="feature-title">Built for Hackathons</h3>
+        <p class="feature-text">Full-stack MVP: Node.js + Express + MongoDB-ready + offline demo mode.</p>
       </div>
     </div>
 
@@ -103,30 +112,7 @@
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <a class="brand" href="index.html"><span class="logo">🚑</span>Medi<span class="accent">Rescue</span>&nbsp;AI</a>
-          <p style="margin-top:.8rem;font-size:.9rem">Smart Emergency Healthcare & Response Platform.<br/>“Fast Help. Smart Decisions. Saved Lives.”</p>
-        </div>
-        <div>
-          <h4>Modules</h4>
-          <a href="emergency.html">🚨 Smart SOS</a>
-          <a href="hospitals.html">🏥 Hospital Finder</a>
-          <a href="ambulance.html">🚑 Ambulance Request</a>
-          <a href="blood-bank.html">🩸 Blood Bank Finder</a>
-        </div>
-        <div>
-          <h4>Platform</h4>
-          <a href="assistant.html">🤖 AI Assistant</a>
-          <a href="dashboard.html">📊 Dashboard</a>
-          <a href="login.html">🔐 Login / Register</a>
-        </div>
-      </div>
-      <p class="fineprint">⚠️ MediRescue AI does not replace doctors or emergency services. In a life-threatening emergency, call 112 / 108 immediately. © 2026 MediRescue AI — Hackathon MVP.</p>
-    </div>
-  </footer>
+  <footer id="footer"></footer>
 
   <script src="js/app.js"></script>
 </body>

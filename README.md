@@ -149,10 +149,12 @@ Emergency ke time har second matter karta hai — lekin aaj bhi users ko multipl
 | Layer | Technology |
 |---|---|
 | **Frontend** | HTML5, CSS3, Vanilla JavaScript |
+| **UI/UX** | Premium design system · 🌙 Dark mode · hamburger nav · SVG icons · PWA (installable) |
+| **Responsive** | Mobile 📱 · Tablet · Laptop 💻 — 44px touch targets, safe-area insets, sticky mobile call bar |
 | **Maps** | Leaflet.js + OpenStreetMap (zero API keys) |
-| **Backend** | Node.js + Express.js |
+| **Backend** | Node.js + Express.js (security headers, auth rate-limiting) |
 | **Database** | MongoDB Atlas *(optional — auto in-memory fallback)* |
-| **Auth** | JWT + bcryptjs |
+| **Auth** | JWT + bcryptjs (offline fallback uses SHA-256 hashed passwords) |
 | **AI Engine** | Rule-based triage NLU (offline-capable, EN/HI) |
 | **Deployment** | GitHub Pages (frontend) |
 
@@ -286,8 +288,11 @@ MediRescue-AI/
 │   ├── ambulance.html        🚑 Request + tracking
 │   ├── blood-bank.html       🩸 Availability
 │   ├── assistant.html        🤖 AI chat
-│   ├── css/                  Design system (prime color palette)
-│   └── js/                   app · auth · maps · sos · ai
+│   ├── css/                  Design system (dark mode, responsive)
+│   ├── js/                   app · auth · maps · sos · ai · ambulance · blood · dashboard
+│   ├── sw.js                 Service worker (offline PWA)
+│   ├── manifest.webmanifest  PWA manifest
+│   └── favicon.svg           App icon
 │
 ├── server/
 │   ├── server.js             Express app + static hosting

@@ -2,30 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>AI Emergency Assistant — MediRescue AI</title>
+  <meta name="description" content="Describe the emergency in Hindi or English and get instant first-aid guidance and urgency triage from the MediRescue AI assistant." />
+  <meta name="theme-color" content="#14213d" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="manifest" href="manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=2" />
+  <script>
+    (function () {
+      var t = localStorage.getItem("mr_theme");
+      if (!t && window.matchMedia) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t || "light");
+    })();
+  </script>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container nav-inner">
-      <a class="brand" href="index.html"><span class="logo">🚑</span>Medi<span class="accent">Rescue</span>&nbsp;AI</a>
-      <div class="nav-links">
-        <a href="emergency.html">🚨 SOS</a>
-        <a href="dashboard.html">📊 Dashboard</a>
-        <a href="hospitals.html">🏥 Hospitals</a>
-        <a href="ambulance.html">🚑 Ambulance</a>
-        <a href="blood-bank.html">🩸 Blood</a>
-        <span id="nav-auth"></span>
-      </div>
-    </div>
-  </nav>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav id="navbar"></nav>
 
-  <main class="container">
+  <main class="container" id="main">
     <div class="page-head">
-      <h1>🤖 AI Emergency Assistant</h1>
+      <h1><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M9 4h6"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg>AI Emergency Assistant</h1>
       <p>Describe the emergency in Hindi or English — get instant first-aid guidance and urgency recommendation.</p>
     </div>
 
@@ -36,12 +38,13 @@
 
     <div class="grid grid-2" style="align-items:start">
       <div class="chat-window">
-        <div style="padding:.8rem 1.2rem;background:linear-gradient(90deg,var(--navy-dark),var(--navy));color:#fff;font-weight:700;display:flex;justify-content:space-between;align-items:center">
+        <div style="padding:.8rem 1.2rem;background:var(--header-grad);color:#fff;font-weight:700;display:flex;justify-content:space-between;align-items:center">
           <span>🤖 MediRescue AI — Triage Support</span>
           <span class="badge badge-green" style="background:rgba(22,163,74,.25);color:#7ef0a5">● Online</span>
         </div>
-        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
         <form id="chat-form" class="chat-input-bar">
+          <label for="chat-input" class="skip-link">Describe the emergency</label>
           <input type="text" id="chat-input" placeholder="e.g., My friend is bleeding badly… (Hindi bhi chalega)" autocomplete="off" />
           <button type="submit" class="btn btn-primary">Send ➤</button>
         </form>
@@ -55,9 +58,9 @@
         </div>
         <div class="card">
           <h3 style="font-size:1rem;margin-bottom:.6rem">🧠 How it works</h3>
-          <ul class="flow-list" style="--dot-bg:var(--teal)">
+          <ul class="flow-list">
             <li><span class="dot" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark))">1</span> You describe the emergency (EN/HI)</li>
-            <li><span class="dot" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark))">2</span> AI detects emergency intent & category</li>
+            <li><span class="dot" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark))">2</span> AI detects emergency intent &amp; category</li>
             <li><span class="dot" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark))">3</span> Risk priority: LOW → CRITICAL</li>
             <li><span class="dot" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark))">4</span> Safe first-aid steps + escalation advice</li>
             <li><span class="dot" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark))">5</span> One-tap SOS / Ambulance / Hospital actions</li>
@@ -67,11 +70,7 @@
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <p class="fineprint">⚠️ MediRescue AI does not replace doctors or emergency services. In a life-threatening emergency, call 112 / 108 immediately. © 2026 MediRescue AI</p>
-    </div>
-  </footer>
+  <footer id="footer"></footer>
 
   <script src="js/app.js"></script>
   <script src="js/ai.js"></script>

@@ -2,24 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Login / Register — MediRescue AI</title>
+  <meta name="description" content="Login or create a MediRescue AI account to access your emergency profile, SOS history and operations dashboard." />
+  <meta name="theme-color" content="#14213d" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="manifest" href="manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=2" />
+  <script>
+    (function () {
+      var t = localStorage.getItem("mr_theme");
+      if (!t && window.matchMedia) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t || "light");
+    })();
+  </script>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container nav-inner">
-      <a class="brand" href="index.html"><span class="logo">🚑</span>Medi<span class="accent">Rescue</span>&nbsp;AI</a>
-      <div class="nav-links"><a href="index.html">🏠 Home</a><span id="nav-auth"></span></div>
-    </div>
-  </nav>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav id="navbar"></nav>
 
-  <div class="auth-wrap">
+  <div class="auth-wrap" id="main">
     <div class="card auth-card">
       <h2 style="text-align:center;margin-bottom:.3rem">🔐 Welcome</h2>
-      <p id="auth-hint" style="text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:1.2rem">Login to access your emergency profile & SOS history.</p>
+      <p id="auth-hint" style="text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:1.2rem">Login to access your emergency profile &amp; SOS history.</p>
       <div class="auth-tabs">
         <button id="tab-login" class="active" type="button">Login</button>
         <button id="tab-register" type="button">Register</button>
@@ -28,11 +37,11 @@
       <form id="login-form">
         <div class="form-group">
           <label for="login-email">Email</label>
-          <input type="email" id="login-email" placeholder="you@example.com" required />
+          <input type="email" id="login-email" placeholder="you@example.com" required autocomplete="email" />
         </div>
         <div class="form-group">
           <label for="login-password">Password</label>
-          <input type="password" id="login-password" placeholder="••••••••" required minlength="6" />
+          <input type="password" id="login-password" placeholder="••••••••" required minlength="6" autocomplete="current-password" />
         </div>
         <button type="submit" class="btn btn-primary btn-block btn-lg">Login →</button>
       </form>
@@ -40,20 +49,20 @@
       <form id="register-form" style="display:none">
         <div class="form-group">
           <label for="reg-name">Full Name</label>
-          <input type="text" id="reg-name" placeholder="Your name" required />
+          <input type="text" id="reg-name" placeholder="Your name" required autocomplete="name" />
         </div>
         <div class="form-group">
           <label for="reg-email">Email</label>
-          <input type="email" id="reg-email" placeholder="you@example.com" required />
+          <input type="email" id="reg-email" placeholder="you@example.com" required autocomplete="email" />
         </div>
         <div class="form-group">
           <label for="reg-password">Password</label>
-          <input type="password" id="reg-password" placeholder="Min 6 characters" required minlength="6" />
+          <input type="password" id="reg-password" placeholder="Min 6 characters" required minlength="6" autocomplete="new-password" />
         </div>
         <div class="grid grid-2" style="gap:.8rem">
           <div class="form-group">
             <label for="reg-phone">Phone</label>
-            <input type="tel" id="reg-phone" placeholder="+91-" />
+            <input type="tel" id="reg-phone" placeholder="+91-" autocomplete="tel" />
           </div>
           <div class="form-group">
             <label for="reg-blood">Blood Group</label>
@@ -72,6 +81,8 @@
       </div>
     </div>
   </div>
+
+  <footer id="footer"></footer>
 
   <script src="js/app.js"></script>
   <script src="js/auth.js"></script>

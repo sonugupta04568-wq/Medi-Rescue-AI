@@ -2,7 +2,13 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const store = require("../store");
 
-const JWT_SECRET = process.env.JWT_SECRET || "medirescue-dev-secret";
+const DEFAULT_SECRET = "medirescue-dev-secret";
+const JWT_SECRET = process.env.JWT_SECRET || DEFAULT_SECRET;
+
+if (process.env.NODE_ENV === "production" && JWT_SECRET === DEFAULT_SECRET) {
+  console.error("FATAL: JWT_SECRET is not set (or uses the default) in production. Set a strong JWT_SECRET in .env and restart.");
+  process.exit(1);
+}
 
 function sign(user) {
   return jwt.sign({ email: user.email, name: user.name }, JWT_SECRET, { expiresIn: "7d" });

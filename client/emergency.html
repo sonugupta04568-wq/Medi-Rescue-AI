@@ -2,36 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Emergency SOS — MediRescue AI</title>
+  <meta name="description" content="One-tap Smart SOS: direct call to the rescue line, GPS location capture, emergency record creation and contact alerts in seconds." />
+  <meta name="theme-color" content="#14213d" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="manifest" href="manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/emergency.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=2" />
+  <link rel="stylesheet" href="css/emergency.css?v=2" />
+  <script>
+    (function () {
+      var t = localStorage.getItem("mr_theme");
+      if (!t && window.matchMedia) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", t || "light");
+    })();
+  </script>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="container nav-inner">
-      <a class="brand" href="index.html"><span class="logo">🚑</span>Medi<span class="accent">Rescue</span>&nbsp;AI</a>
-      <div class="nav-links">
-        <a href="dashboard.html">📊 Dashboard</a>
-        <a href="hospitals.html">🏥 Hospitals</a>
-        <a href="ambulance.html">🚑 Ambulance</a>
-        <a href="assistant.html">🤖 AI Help</a>
-        <span id="nav-auth"></span>
-      </div>
-    </div>
-  </nav>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav id="navbar"></nav>
 
-  <main class="container">
+  <main class="container" id="main">
     <div class="page-head">
-      <h1>🚨 Smart SOS System</h1>
+      <h1><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 12a5 5 0 0 1 10 0v6H7v-6Z"/><path d="M5 20h14"/><path d="M12 2v2"/><path d="M4.9 5.6 6.3 7"/><path d="M19.1 5.6 17.7 7"/><path d="M9 12a3 3 0 0 1 6 0"/></svg>Smart SOS System</h1>
       <p>Ek click: 📞 direct call <b>+91 93358 70885</b> par • location captured → emergency created → contacts alerted.</p>
     </div>
 
     <div class="grid grid-2" style="align-items:start">
       <section class="sos-stage">
-        <button id="sos-btn" class="sos-btn">SOS<small>PRESS IN EMERGENCY</small></button>
+        <button id="sos-btn" class="sos-btn" aria-label="Trigger emergency SOS">SOS<small>PRESS IN EMERGENCY</small></button>
         <div class="sos-status">
           <div class="big" id="sos-status-big">Ready to help you 24×7</div>
           <div class="sub" id="sos-status-sub">Press the button — we'll handle the rest.</div>
@@ -114,11 +117,13 @@
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <p class="fineprint">⚠️ MediRescue AI does not replace doctors or emergency services. In a life-threatening emergency, call 112 / 108 immediately. © 2026 MediRescue AI</p>
-    </div>
-  </footer>
+  <!-- Sticky mobile call bar: rescue line always one thumb-tap away -->
+  <div class="sos-sticky-bar">
+    <a href="tel:+919335870885" class="btn btn-primary btn-lg">📞 Call Rescue Line</a>
+    <a href="tel:108" class="btn btn-navy btn-lg">🚑 108</a>
+  </div>
+
+  <footer id="footer"></footer>
 
   <script src="js/app.js"></script>
   <script src="js/sos.js"></script>
