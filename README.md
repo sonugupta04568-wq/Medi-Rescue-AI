@@ -23,7 +23,7 @@ MediRescue AI ek single platform hai jo **SOS, location sharing, ambulance reque
 
 ## 🧩 Modules (Hackathon MVP)
 
-1. ✅ **Smart SOS System** — GPS capture → Emergency record → Contacts alert workflow
+1. ✅ **Smart SOS System** — One click: 📞 **direct auto-call to rescue line (+91 93358 70885)** + GPS capture → Emergency record → Siren + vibration → WhatsApp/SMS alerts with live location
 2. ✅ **Nearby Hospital Finder** — Live map, distance, directions, emergency availability
 3. ✅ **Ambulance Request System** — Request → Assign → Driver details → Live status tracking
 4. ✅ **Blood Bank Finder** — Blood group availability (demo data)
