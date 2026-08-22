@@ -25,6 +25,7 @@ const ICONS = {
   download: '<path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/>',
   activity: '<path d="M3 12h4l3 8 4-16 3 8h4"/>',
   shield: '<path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-4Z"/>',
+  stethoscope: '<path d="M11 2v2"/><path d="M5 2v2"/><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"/><path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/>',
   message: '<path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5Z"/>'
 };
 
@@ -55,6 +56,7 @@ const Theme = {
 const NAV_LINKS = [
   { href: "emergency.html", label: "SOS", icon: "siren" },
   { href: "hospitals.html", label: "Hospitals", icon: "hospital" },
+  { href: "doctors.html", label: "Doctors", icon: "stethoscope" },
   { href: "ambulance.html", label: "Ambulance", icon: "ambulance" },
   { href: "blood-bank.html", label: "Blood", icon: "droplet" },
   { href: "assistant.html", label: "AI Help", icon: "bot" },

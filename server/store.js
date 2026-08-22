@@ -1,4 +1,4 @@
-const { HOSPITALS, BLOOD_BANKS, AMBULANCES } = require("./data/seed");
+const { HOSPITALS, BLOOD_BANKS, AMBULANCES, DOCTORS } = require("./data/seed");
 const { isConnected } = require("./config/db");
 const User = require("./models/User");
 const Emergency = require("./models/Emergency");
@@ -7,7 +7,20 @@ const users = new Map();
 const emergencies = new Map();
 const ambulanceRequests = new Map();
 const ambulances = AMBULANCES.map((a) => ({ ...a }));
+const doctors = DOCTORS.map((d) => ({ ...d }));
 let emergencySeq = 1000;
+
+/* Live feel: flip one random doctor's online status every 30s (demo MVP). */
+setInterval(() => {
+  if (!doctors.length) return;
+  const d = doctors[Math.floor(Math.random() * doctors.length)];
+  d.online = !d.online;
+}, 30000);
+setInterval(() => {
+  if (!doctors.length) return;
+  const offline = doctors.filter((d) => !d.online);
+  if (offline.length > 4) offline[Math.floor(Math.random() * offline.length)].online = true;
+}, 45000);
 
 function nextEmergencyId() {
   emergencySeq += 1;
@@ -118,6 +131,12 @@ function listAmbulances() {
   return ambulances.filter((a) => a.status === "AVAILABLE");
 }
 
+function listDoctors(specialty) {
+  return doctors
+    .filter((d) => !specialty || d.specialty === specialty)
+    .sort((a, b) => b.online - a.online || b.rating - a.rating);
+}
+
 function createAmbulanceRequest(data) {
   const pool = ambulances.filter((a) => a.status === "AVAILABLE" && (!data.type || a.type === data.type));
   const unit = pool[0] || ambulances.find((a) => a.status === "AVAILABLE");
@@ -173,6 +192,8 @@ function getStats() {
     totalEmergencies: all.length,
     ambulanceRequests: ambulanceRequests.size,
     hospitals: HOSPITALS.length,
+    doctors: doctors.length,
+    doctorsOnline: doctors.filter((d) => d.online).length,
     bloodBanks: BLOOD_BANKS.length,
     availableAmbulances: ambulances.filter((a) => a.status === "AVAILABLE").length
   };
@@ -188,6 +209,7 @@ module.exports = {
   listHospitals,
   listBlood,
   listAmbulances,
+  listDoctors,
   createAmbulanceRequest,
   getAmbulanceRequest,
   advanceAmbulanceRequest,

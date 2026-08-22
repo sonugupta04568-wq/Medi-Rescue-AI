@@ -145,6 +145,12 @@ Emergency ke time har second matter karta hai — lekin aaj bhi users ko multipl
 - Live stats: Active emergencies, Resolved, Ambulance requests, Hospitals
 - Recent emergencies feed + fleet status
 
+### 9. 👨‍⚕️ Live Doctor Consultation
+- Doctor directory across Delhi & Noida (demo data) with **live Online Now status** (server flips availability every 30s; client polls)
+- Specialty filter: Emergency Medicine, General Physician, Cardiologist, Neurologist, Orthopedic, Pediatrician, Trauma Surgeon, Gynecologist
+- One-tap 📞 Call and 💬 WhatsApp Consult
+- Online doctors sorted first; offline demo mode works too
+
 ---
 
 ## 🛠 Tech Stack

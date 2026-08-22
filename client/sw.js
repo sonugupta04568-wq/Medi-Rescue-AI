@@ -1,11 +1,12 @@
 /* MediRescue AI service worker — cache-first for static assets, network-first for APIs */
-const CACHE = "medirescue-v3";
+const CACHE = "medirescue-v4";
 const ASSETS = [
   "./", "./index.html", "./emergency.html", "./ambulance.html", "./hospitals.html",
-  "./blood-bank.html", "./assistant.html", "./dashboard.html", "./login.html",
-  "./css/style.css?v=3", "./css/emergency.css?v=3", "./css/dashboard.css?v=3",
-  "./js/app.js?v=3", "./js/sos.js?v=3", "./js/ai.js?v=3", "./js/auth.js?v=3", "./js/maps.js?v=3",
-  "./js/hospitals-data.js?v=3", "./js/ambulance.js?v=3", "./js/blood.js?v=3", "./js/dashboard.js?v=3",
+  "./doctors.html", "./blood-bank.html", "./assistant.html", "./dashboard.html", "./login.html",
+  "./css/style.css?v=4", "./css/emergency.css?v=4", "./css/dashboard.css?v=4",
+  "./js/app.js?v=4", "./js/sos.js?v=4", "./js/ai.js?v=4", "./js/auth.js?v=4", "./js/maps.js?v=4",
+  "./js/hospitals-data.js?v=4", "./js/ambulance.js?v=4", "./js/blood.js?v=4", "./js/dashboard.js?v=4",
+  "./js/doctors-data.js?v=4", "./js/doctors.js?v=4",
   "./favicon.svg", "./manifest.webmanifest",
   "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
   "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
