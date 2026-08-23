@@ -1,4 +1,4 @@
-const { HOSPITALS, BLOOD_BANKS, AMBULANCES, DOCTORS } = require("./data/seed");
+const { HOSPITALS, BLOOD_BANKS, AMBULANCES, DOCTORS, BEDS } = require("./data/seed");
 const { isConnected } = require("./config/db");
 const User = require("./models/User");
 const Emergency = require("./models/Emergency");
@@ -8,6 +8,13 @@ const emergencies = new Map();
 const ambulanceRequests = new Map();
 const ambulances = AMBULANCES.map((a) => ({ ...a }));
 const doctors = DOCTORS.map((d) => ({ ...d }));
+const beds = BEDS.map((b) => ({
+  ...b,
+  general: { ...b.general },
+  icu: { ...b.icu },
+  oxygen: { ...b.oxygen },
+  ventilator: { ...b.ventilator }
+}));
 let emergencySeq = 1000;
 
 /* Live feel: flip one random doctor's online status every 30s (demo MVP). */
@@ -21,6 +28,16 @@ setInterval(() => {
   const offline = doctors.filter((d) => !d.online);
   if (offline.length > 4) offline[Math.floor(Math.random() * offline.length)].online = true;
 }, 45000);
+
+/* Live feel: simulate admissions/discharges — one random bed count changes every 12s. */
+const BED_CATS = ["general", "icu", "oxygen", "ventilator"];
+setInterval(() => {
+  if (!beds.length) return;
+  const b = beds[Math.floor(Math.random() * beds.length)];
+  const cat = BED_CATS[Math.floor(Math.random() * BED_CATS.length)];
+  const delta = Math.random() < 0.5 ? -1 : 1;
+  b[cat].available = Math.max(0, Math.min(b[cat].total, b[cat].available + delta));
+}, 12000);
 
 function nextEmergencyId() {
   emergencySeq += 1;
@@ -137,6 +154,24 @@ function listDoctors(specialty) {
     .sort((a, b) => b.online - a.online || b.rating - a.rating);
 }
 
+function listBeds(city) {
+  return beds
+    .map((b) => {
+      const h = HOSPITALS.find((x) => x.id === b.hospitalId) || {};
+      return {
+        ...b,
+        name: h.name,
+        city: h.city,
+        emergency: h.emergency,
+        phone: h.phone,
+        lat: h.lat,
+        lng: h.lng
+      };
+    })
+    .filter((b) => !city || b.city === city)
+    .sort((a, b) => b.general.available + b.icu.available - (a.general.available + a.icu.available));
+}
+
 function createAmbulanceRequest(data) {
   const pool = ambulances.filter((a) => a.status === "AVAILABLE" && (!data.type || a.type === data.type));
   const unit = pool[0] || ambulances.find((a) => a.status === "AVAILABLE");
@@ -194,6 +229,7 @@ function getStats() {
     hospitals: HOSPITALS.length,
     doctors: doctors.length,
     doctorsOnline: doctors.filter((d) => d.online).length,
+    bedsAvailable: beds.reduce((sum, b) => sum + b.general.available + b.icu.available + b.oxygen.available + b.ventilator.available, 0),
     bloodBanks: BLOOD_BANKS.length,
     availableAmbulances: ambulances.filter((a) => a.status === "AVAILABLE").length
   };
@@ -210,6 +246,7 @@ module.exports = {
   listBlood,
   listAmbulances,
   listDoctors,
+  listBeds,
   createAmbulanceRequest,
   getAmbulanceRequest,
   advanceAmbulanceRequest,

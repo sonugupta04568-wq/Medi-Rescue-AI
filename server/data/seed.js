@@ -66,4 +66,26 @@ const DOCTORS = [
   { id: "d14", name: "Dr. Imran Sheikh", specialty: "Orthopedic", hospital: "Yatharth Super Speciality", city: "Noida", experience: 11, rating: 4.6, online: true, phone: "+91-9811000114" }
 ];
 
-module.exports = { HOSPITALS, BLOOD_BANKS, AMBULANCES, DOCTORS };
+/* Demo bed availability — deterministic generated values per hospital (hackathon MVP data).
+   Server fluctuates these periodically for a "live" feel. */
+function genBeds(hospitals) {
+  return hospitals.map((h, i) => {
+    const scale = h.emergency ? 1 : 0.3;
+    const cat = (total, availPct) => {
+      const t = Math.round(total * scale);
+      const jitter = ((i * 7) % 5) - 2;
+      return { total: t, available: Math.max(0, Math.min(t, Math.round(t * availPct + jitter))) };
+    };
+    return {
+      hospitalId: h.id,
+      general: cat(80, 0.35),
+      icu: cat(20, 0.25),
+      oxygen: cat(30, 0.3),
+      ventilator: cat(10, 0.2)
+    };
+  });
+}
+
+const BEDS = genBeds(HOSPITALS);
+
+module.exports = { HOSPITALS, BLOOD_BANKS, AMBULANCES, DOCTORS, BEDS };

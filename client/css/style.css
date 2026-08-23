@@ -327,6 +327,32 @@ h1, h2, h3, h4 { line-height: 1.25; font-weight: 700; color: var(--navy-dark); }
 .feature-cta .feature-title { color: #fff; }
 .feature-cta .feature-text { color: #ffd4d7; }
 
+/* ---------- Bed availability ---------- */
+.bed-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 70px auto;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 0.88rem;
+}
+.bed-row .bed-label { font-weight: 600; color: var(--text); }
+.bed-row .bed-count { font-weight: 700; color: var(--navy-dark); font-variant-numeric: tabular-nums; text-align: right; }
+[data-theme="dark"] .bed-row .bed-count { color: #eef3fa; }
+.bed-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--soft-navy);
+  overflow: hidden;
+}
+.bed-bar-fill { height: 100%; border-radius: 999px; transition: width 0.6s ease; }
+.bed-bar-fill.ok { background: linear-gradient(90deg, var(--teal), #3ec2b2); }
+.bed-bar-fill.warn { background: linear-gradient(90deg, #d97706, var(--amber)); }
+.bed-bar-fill.full { background: var(--primary); }
+@media (max-width: 560px) {
+  .bed-row { grid-template-columns: 96px 1fr 62px; }
+  .bed-row .badge { display: none; }
+}
+
 /* ---------- Doctor cards ---------- */
 .doc-card .doc-head { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; }
 .doc-card .doc-head > div:nth-child(2) { flex: 1; min-width: 140px; }

@@ -151,6 +151,12 @@ Emergency ke time har second matter karta hai — lekin aaj bhi users ko multipl
 - One-tap 📞 Call and 💬 WhatsApp Consult
 - Online doctors sorted first; offline demo mode works too
 
+### 10. 🛏️ Live Bed Availability
+- Per-hospital **live bed status**: General, ICU, Oxygen, Ventilator — with progress bars and Available/Limited/Full badges
+- Server simulates admissions/discharges every 12s; client refreshes every 25s (works offline too)
+- City filter (All/Delhi/Noida) + summary strip of free beds by category
+- One-tap Call Hospital, Directions, Send Ambulance
+
 ---
 
 ## 🛠 Tech Stack

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Nearby Hospital Finder — MediRescue AI</title>
-  <meta name="description" content="Live map of nearby hospitals sorted by distance with emergency availability, directions and one-tap call." />
+  <title>Live Bed Availability — MediRescue AI</title>
+  <meta name="description" content="Live hospital bed availability across Delhi & Noida — General, ICU, Oxygen and Ventilator beds with real-time updates." />
   <meta name="theme-color" content="#14213d" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="apple-touch-icon" href="favicon.svg" />
@@ -12,7 +12,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/style.css?v=5" />
   <script>
     (function () {
@@ -28,36 +27,37 @@
 
   <main class="container" id="main">
     <div class="page-head">
-      <h1><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v4M10 8h4"/><path d="M14.5 4h-5l-.5 2h6l-.5-2Z"/><path d="M5 10h14v10H5z"/><path d="M9 20v-4h6v4"/></svg>Nearby Hospital Finder</h1>
-      <p id="loc-status">📍 Detecting your location…</p>
+      <h1><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>Live Bed Availability</h1>
+      <p>Har hospital me General, ICU, Oxygen aur Ventilator beds ki <b>live</b> khaali status — har 25 second me update.</p>
     </div>
 
-    <div style="display:flex;gap:.7rem;margin-bottom:1rem;flex-wrap:wrap">
-      <button id="refresh-loc" class="btn btn-sm btn-primary">📍 Refresh My Location</button>
-      <a href="ambulance.html" class="btn btn-sm btn-navy">🚑 Request Ambulance Instead</a>
-      <span id="hospital-count" style="align-self:center;color:var(--muted);font-size:.9rem"></span>
+    <div class="disclaimer" style="margin-bottom:1.2rem">
+      <span>⚠️</span>
+      <span><b>Demo data:</b> Bed numbers hackathon MVP ke liye simulate kiye ja rahe hain (admissions/discharges). Real emergency mein hospital ko call karke confirm karein.</span>
     </div>
 
     <section class="card" style="margin-bottom:1.2rem">
-      <h3 style="font-size:1.05rem;margin-bottom:.8rem">Filter by City</h3>
-      <div class="chips" id="city-chips">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:.9rem">
+        <h3 style="font-size:1.05rem">Filter by City</h3>
+        <span id="beds-count" style="color:var(--muted);font-size:.9rem"></span>
+      </div>
+      <div class="chips" id="bed-city-chips">
         <button class="chip selected" data-city="All">🏥 All Hospitals</button>
         <button class="chip" data-city="Delhi">🏙️ Delhi</button>
         <button class="chip" data-city="Noida">🌆 Noida</button>
       </div>
     </section>
 
-    <div class="map-wrap"><div id="map" role="application" aria-label="Map of nearby hospitals"></div></div>
+    <div id="beds-summary" class="grid grid-4" style="margin-bottom:1.4rem"></div>
 
-    <h2 class="section-title" style="margin-top:2.2rem;font-size:1.3rem">Hospitals near you (sorted by distance)</h2>
-    <div id="hospital-list" class="grid grid-2"></div>
+    <div id="beds-list" class="grid grid-2"></div>
   </main>
 
   <footer id="footer"></footer>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/app.js?v=5"></script>
   <script src="js/hospitals-data.js?v=5"></script>
-  <script src="js/maps.js?v=5"></script>
+  <script src="js/beds-data.js?v=5"></script>
+  <script src="js/beds.js?v=5"></script>
 </body>
 </html>

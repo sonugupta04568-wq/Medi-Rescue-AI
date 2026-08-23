@@ -9,6 +9,7 @@ const hospitalRoutes = require("./routes/hospitalRoutes");
 const doctorRoutes = require("./routes/doctorRoutes");
 const ambulanceRoutes = require("./routes/ambulanceRoutes");
 const bloodRoutes = require("./routes/bloodRoutes");
+const bedsRoutes = require("./routes/bedsRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const { getStats } = require("./store");
 
@@ -63,6 +64,7 @@ app.use("/api/hospitals", hospitalRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/ambulance", ambulanceRoutes);
 app.use("/api/blood", bloodRoutes);
+app.use("/api/beds", bedsRoutes);
 app.use("/api/ai", aiRoutes);
 
 app.use((req, res, next) => {
