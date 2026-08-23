@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=9" />
+  <link rel="stylesheet" href="css/style.css?v=10" />
   <script>
     (function () {
       var t = localStorage.getItem("mr_theme");
@@ -105,6 +105,21 @@
       </div>
     </div>
 
+    <section style="margin-top:3.5rem">
+      <div class="card" style="padding:1.6rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap">
+          <h2 style="font-size:1.4rem">⏱️ Live Predicted Beds</h2>
+          <span class="badge badge-green"><span class="online-dot"></span>Live</span>
+        </div>
+        <p style="color:var(--muted);font-size:.9rem;margin-top:.3rem">Abhi khaali beds + kitne minute baad kitne beds free honge — real-time countdown.</p>
+        <div id="home-beds-summary" class="chips" style="margin:1.1rem 0"></div>
+        <div id="home-beds-events" class="grid grid-3"></div>
+        <div style="margin-top:1.3rem;text-align:center">
+          <a href="beds.html" class="btn btn-primary">🛏️ View Full Bed Availability</a>
+        </div>
+      </div>
+    </section>
+
     <div style="margin-top:3.5rem;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center">
       <a href="emergency.html" class="btn btn-primary btn-lg">🚨 Try SOS Demo</a>
       <a href="assistant.html" class="btn btn-navy btn-lg">🤖 Chat with AI Assistant</a>
@@ -114,6 +129,9 @@
 
   <footer id="footer"></footer>
 
-  <script src="js/app.js?v=9"></script>
+  <script src="js/app.js?v=10"></script>
+  <script src="js/hospitals-data.js?v=10"></script>
+  <script src="js/beds-data.js?v=10"></script>
+  <script src="js/home-beds.js?v=10"></script>
 </body>
 </html>

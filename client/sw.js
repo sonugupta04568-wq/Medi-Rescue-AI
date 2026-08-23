@@ -1,12 +1,12 @@
 /* MediRescue AI service worker — cache-first for static assets, network-first for APIs */
-const CACHE = "medirescue-v9";
+const CACHE = "medirescue-v10";
 const ASSETS = [
   "./", "./index.html", "./emergency.html", "./ambulance.html", "./hospitals.html",
   "./doctors.html", "./beds.html", "./blood-bank.html", "./assistant.html", "./dashboard.html", "./login.html",
-  "./css/style.css?v=9", "./css/emergency.css?v=9", "./css/dashboard.css?v=9",
-  "./js/app.js?v=9", "./js/sos.js?v=9", "./js/ai.js?v=9", "./js/auth.js?v=9", "./js/maps.js?v=9",
-  "./js/hospitals-data.js?v=9", "./js/ambulance.js?v=9", "./js/blood.js?v=9", "./js/dashboard.js?v=9",
-  "./js/doctors-data.js?v=9", "./js/doctors.js?v=9", "./js/beds-data.js?v=9", "./js/beds.js?v=9",
+  "./css/style.css?v=10", "./css/emergency.css?v=10", "./css/dashboard.css?v=10",
+  "./js/app.js?v=10", "./js/sos.js?v=10", "./js/ai.js?v=10", "./js/auth.js?v=10", "./js/maps.js?v=10",
+  "./js/hospitals-data.js?v=10", "./js/ambulance.js?v=10", "./js/blood.js?v=10", "./js/dashboard.js?v=10",
+  "./js/doctors-data.js?v=10", "./js/doctors.js?v=10", "./js/beds-data.js?v=10", "./js/beds.js?v=10", "./js/home-beds.js?v=10",
   "./favicon.svg", "./manifest.webmanifest",
   "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
   "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
