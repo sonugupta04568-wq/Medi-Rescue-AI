@@ -70,6 +70,10 @@ body {
   transition: background 0.25s ease, color 0.25s ease;
 }
 
+/* Kabhi bhi page left-right scroll na ho (clip sticky navbar ko nahi todta) */
+html, body { overflow-x: hidden; overflow-x: clip; }
+.grid > * { min-width: 0; }
+
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
@@ -168,8 +172,8 @@ h1, h2, h3, h4 { line-height: 1.25; font-weight: 700; color: var(--navy-dark); }
 
 .nav-toggle { display: none; }
 
-/* Mobile drawer */
-@media (max-width: 860px) {
+/* Mobile/tablet drawer — 8 nav links need the hamburger below 1100px */
+@media (max-width: 1100px) {
   .nav-toggle { display: inline-grid; }
   .nav-links {
     position: absolute;
