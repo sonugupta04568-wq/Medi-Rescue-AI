@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=5" />
+  <link rel="stylesheet" href="css/style.css?v=6" />
   <script>
     (function () {
       var t = localStorage.getItem("mr_theme");
@@ -28,7 +28,7 @@
   <main class="container" id="main">
     <div class="page-head">
       <h1><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>Live Bed Availability</h1>
-      <p>Har hospital me General, ICU, Oxygen aur Ventilator beds ki <b>live</b> khaali status — har 25 second me update.</p>
+      <p>Har hospital me General, ICU, Oxygen aur Ventilator beds ki <b>live</b> status — har 10 second me update, plus <b>kitne minute baad kitne beds free honge</b> ka countdown.</p>
     </div>
 
     <div class="disclaimer" style="margin-bottom:1.2rem">
@@ -50,14 +50,25 @@
 
     <div id="beds-summary" class="grid grid-4" style="margin-bottom:1.4rem"></div>
 
+    <section class="card" style="margin-bottom:1.4rem">
+      <h3 style="font-size:1.05rem;margin-bottom:.3rem">⏱️ Freeing Soon — Predicted Discharges</h3>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:.9rem">Kitne time baad kitne beds free honge — countdown khatam hote hi beds sach me free ho jaate hain (demo simulation).</p>
+      <div id="beds-events" class="grid grid-3"></div>
+    </section>
+
+    <section class="card" style="margin-bottom:1.4rem">
+      <h3 style="font-size:1.05rem;margin-bottom:.6rem">📡 Live Activity</h3>
+      <div id="beds-feed" class="timeline"></div>
+    </section>
+
     <div id="beds-list" class="grid grid-2"></div>
   </main>
 
   <footer id="footer"></footer>
 
-  <script src="js/app.js?v=5"></script>
-  <script src="js/hospitals-data.js?v=5"></script>
-  <script src="js/beds-data.js?v=5"></script>
-  <script src="js/beds.js?v=5"></script>
+  <script src="js/app.js?v=6"></script>
+  <script src="js/hospitals-data.js?v=6"></script>
+  <script src="js/beds-data.js?v=6"></script>
+  <script src="js/beds.js?v=6"></script>
 </body>
 </html>

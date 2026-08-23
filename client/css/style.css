@@ -328,6 +328,26 @@ h1, h2, h3, h4 { line-height: 1.25; font-weight: 700; color: var(--navy-dark); }
 .feature-cta .feature-text { color: #ffd4d7; }
 
 /* ---------- Bed availability ---------- */
+.bed-row .bed-count.flash-up { animation: flashUp 1.4s ease; }
+.bed-row .bed-count.flash-down { animation: flashDown 1.4s ease; }
+@keyframes flashUp {
+  0% { color: #16a34a; transform: scale(1.35); text-shadow: 0 0 12px rgba(22, 163, 74, 0.6); }
+  100% { transform: scale(1); }
+}
+@keyframes flashDown {
+  0% { color: #dc2626; transform: scale(1.35); text-shadow: 0 0 12px rgba(220, 38, 38, 0.6); }
+  100% { transform: scale(1); }
+}
+.event-card { padding: 1rem; }
+.event-card .event-countdown {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--teal-dark);
+}
+[data-theme="dark"] .event-card .event-countdown { color: #6fd3c7; }
+.event-card .event-sub { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--teal-dark); }
+[data-theme="dark"] .event-card .event-sub { color: #6fd3c7; }
 .bed-row {
   display: grid;
   grid-template-columns: 110px 1fr 70px auto;

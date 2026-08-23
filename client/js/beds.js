@@ -1,13 +1,17 @@
 const BED_META = {
-  general: { label: "🛏️ General" },
-  icu: { label: "🏥 ICU" },
-  oxygen: { label: "🫁 Oxygen" },
-  ventilator: { label: "💨 Ventilator" }
+  general: { label: "🛏️ General", one: "General bed" },
+  icu: { label: "🏥 ICU", one: "ICU bed" },
+  oxygen: { label: "🫁 Oxygen", one: "Oxygen bed" },
+  ventilator: { label: "💨 Ventilator", one: "Ventilator" }
 };
 let cityFilter = "All";
 let beds = [];
+let events = { upcoming: [], recent: [] };
 let usingFallback = false;
 let lastUpdated = null;
+let lastAvail = {}; // { hospitalId: { general: n, icu: n, ... } }
+let flashSet = new Set(); // "hospitalId:cat" keys that changed since last render
+const feed = []; // live activity items
 
 function bedStatus(cat) {
   if (cat.total === 0) return { cls: "badge-navy", text: "N/A" };
@@ -17,20 +21,29 @@ function bedStatus(cat) {
   return { cls: "badge-green", text: "Available" };
 }
 
-function catRow(key, cat) {
+function catRow(hospitalId, key, cat) {
   const pct = cat.total ? Math.round((cat.available / cat.total) * 100) : 0;
   const st = bedStatus(cat);
+  const flash = flashSet.has(hospitalId + ":" + key);
+  const flashCls = flash ? (lastAvail[hospitalId] && cat.available > (lastAvail[hospitalId][key] ?? cat.available) ? "flash-up" : "flash-down") : "";
   return `
     <div class="bed-row">
       <span class="bed-label">${BED_META[key].label}</span>
       <div class="bed-bar"><div class="bed-bar-fill ${st.cls === "badge-green" ? "ok" : st.cls === "badge-amber" ? "warn" : "full"}" style="width:${pct}%"></div></div>
-      <span class="bed-count">${cat.available} / ${cat.total}</span>
+      <span class="bed-count ${flashCls}">${cat.available} / ${cat.total}</span>
       <span class="badge ${st.cls}">${st.text}</span>
     </div>`;
 }
 
 function totalAvailable() {
   return beds.reduce((s, b) => s + b.general.available + b.icu.available + b.oxygen.available + b.ventilator.available, 0);
+}
+
+function fmtCountdown(iso) {
+  const ms = new Date(iso).getTime() - Date.now();
+  if (ms <= 0) return "now";
+  const s = Math.ceil(ms / 1000);
+  return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
 }
 
 function renderSummary() {
@@ -44,8 +57,49 @@ function renderSummary() {
     <div class="card stat-card"><div class="stat-icon amber">💨</div><div><div class="stat-value">${sum.ventilator}</div><div class="stat-label">Ventilators Free</div></div></div>`;
 }
 
+function renderEvents() {
+  const zone = document.getElementById("beds-events");
+  if (!events.upcoming.length) {
+    zone.innerHTML = `<p style="color:var(--muted);font-size:.9rem">Koi scheduled discharge abhi nahi — naya forecast 20 sec me aata hai.</p>`;
+    return;
+  }
+  zone.innerHTML = events.upcoming
+    .map(
+      (e) => `
+      <div class="card event-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:.6rem">
+          <span class="badge badge-green">+${e.count} ${BED_META[e.category].one}${e.count > 1 ? "s" : ""}</span>
+          <span class="event-countdown" data-freesat="${e.freesAt}">${fmtCountdown(e.freesAt)}</span>
+        </div>
+        <h3 style="font-size:.98rem;margin-top:.6rem">🏥 ${e.hospitalName}</h3>
+        <p style="color:var(--muted);font-size:.82rem">${e.city || ""} • frees in <span class="event-sub" data-freesat="${e.freesAt}">${fmtCountdown(e.freesAt)}</span></p>
+      </div>`
+    )
+    .join("");
+}
+
+function renderFeed() {
+  const zone = document.getElementById("beds-feed");
+  if (!feed.length) {
+    zone.innerHTML = `<div class="timeline-item"><div class="t-label">Waiting for live changes…</div><div class="t-time">bed numbers update every few seconds</div></div>`;
+    return;
+  }
+  zone.innerHTML = feed
+    .slice(0, 6)
+    .map(
+      (f) => `
+      <div class="timeline-item ${f.dir === "up" ? "done" : ""}">
+        <div class="t-label">${f.dir === "up" ? "🟢" : "🔴"} ${f.text}</div>
+        <div class="t-time">${f.time}</div>
+      </div>`
+    )
+    .join("");
+}
+
 function render() {
   renderSummary();
+  renderEvents();
+  renderFeed();
   const zone = document.getElementById("beds-list");
   document.getElementById("beds-count").textContent =
     `${beds.length} hospitals • ${totalAvailable()} beds free • updated ${MR.timeAgo(lastUpdated)}`;
@@ -61,10 +115,10 @@ function render() {
         <span class="badge badge-green"><span class="online-dot"></span>Live</span>
       </div>
       <div style="margin-top:.9rem;display:grid;gap:.45rem">
-        ${catRow("general", b.general)}
-        ${catRow("icu", b.icu)}
-        ${catRow("oxygen", b.oxygen)}
-        ${catRow("ventilator", b.ventilator)}
+        ${catRow(b.hospitalId, "general", b.general)}
+        ${catRow(b.hospitalId, "icu", b.icu)}
+        ${catRow(b.hospitalId, "oxygen", b.oxygen)}
+        ${catRow(b.hospitalId, "ventilator", b.ventilator)}
       </div>
       <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.9rem">
         ${b.phone ? `<a class="btn btn-sm btn-teal" href="tel:${b.phone}">📞 Call Hospital</a>` : ""}
@@ -74,6 +128,30 @@ function render() {
     </div>`
     )
     .join("");
+}
+
+function diffAndFeed() {
+  flashSet = new Set();
+  const next = {};
+  beds.forEach((b) => {
+    next[b.hospitalId] = {};
+    BED_CATS.forEach((k) => (next[b.hospitalId][k] = b[k].available));
+    const prev = lastAvail[b.hospitalId];
+    if (!prev) return;
+    BED_CATS.forEach((k) => {
+      if (b[k].available !== prev[k]) {
+        flashSet.add(b.hospitalId + ":" + k);
+        const n = Math.abs(b[k].available - prev[k]);
+        feed.unshift({
+          dir: b[k].available > prev[k] ? "up" : "down",
+          text: `${n} ${BED_META[k].one}${n > 1 ? "s" : ""} ${b[k].available > prev[k] ? "freed" : "occupied"} at ${b.name}`,
+          time: new Date().toLocaleTimeString()
+        });
+      }
+    });
+  });
+  if (feed.length > 12) feed.length = 12;
+  lastAvail = next;
 }
 
 async function loadBeds() {
@@ -90,8 +168,16 @@ async function loadBeds() {
       .filter((b) => cityFilter === "All" || b.city === cityFilter)
       .sort((a, b) => b.general.available + b.icu.available - (a.general.available + a.icu.available));
   }
+  diffAndFeed();
   lastUpdated = new Date().toISOString();
   render();
+}
+
+async function loadEvents() {
+  let ev = usingFallback ? null : await MR.api("/beds/events");
+  if (!ev) ev = BedEvents.get();
+  events = ev;
+  renderEvents();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -100,15 +186,21 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll("#bed-city-chips .chip").forEach((c) => c.classList.remove("selected"));
       chip.classList.add("selected");
       cityFilter = chip.dataset.city;
+      lastAvail = {};
+      feed.length = 0;
       loadBeds();
     })
   );
 
   loadBeds();
+  loadEvents();
 
-  // Live updates: poll every 25s (server fluctuates counts every 12s); offline mode uses LOCAL_BEDS directly.
+  // Live movement: poll beds every 10s (loadBeds handles server + local modes), events every 20s; countdowns tick every second.
+  setInterval(loadBeds, 10000);
+  setInterval(loadEvents, 20000);
   setInterval(() => {
-    if (usingFallback) render();
-    else loadBeds();
-  }, 25000);
+    document.querySelectorAll(".event-countdown, .event-sub").forEach((el) => {
+      el.textContent = fmtCountdown(el.dataset.freesat);
+    });
+  }, 1000);
 });

@@ -39,6 +39,49 @@ setInterval(() => {
   b[cat].available = Math.max(0, Math.min(b[cat].total, b[cat].available + delta));
 }, 12000);
 
+/* Freeing-soon forecast: scheduled "discharges" that actually free beds when the countdown ends. */
+const bedEvents = [];
+let bedEventSeq = 0;
+
+function addBedEvent() {
+  if (!beds.length) return;
+  const upcoming = bedEvents.filter((e) => e.status === "upcoming");
+  if (upcoming.length >= 8) return;
+  const b = beds[Math.floor(Math.random() * beds.length)];
+  const cat = BED_CATS[Math.floor(Math.random() * BED_CATS.length)];
+  const room = b[cat].total - b[cat].available;
+  if (room <= 0) return;
+  const count = Math.min(room, 1 + Math.floor(Math.random() * 2));
+  bedEvents.push({
+    id: "BE-" + ++bedEventSeq,
+    hospitalId: b.hospitalId,
+    category: cat,
+    count,
+    freesAt: new Date(Date.now() + (2 + Math.floor(Math.random() * 7)) * 60000).toISOString(),
+    status: "upcoming"
+  });
+}
+
+for (let i = 0; i < 6; i++) addBedEvent(); // seed the forecast immediately on boot
+setInterval(addBedEvent, 20000);
+
+setInterval(() => {
+  const now = Date.now();
+  bedEvents.forEach((e) => {
+    if (e.status === "upcoming" && new Date(e.freesAt).getTime() <= now) {
+      const b = beds.find((x) => x.hospitalId === e.hospitalId);
+      if (b) b[e.category].available = Math.min(b[e.category].total, b[e.category].available + e.count);
+      e.status = "applied";
+      e.appliedAt = new Date().toISOString();
+    }
+  });
+  const applied = bedEvents.filter((e) => e.status === "applied");
+  if (applied.length > 10) {
+    const remove = new Set(applied.slice(0, applied.length - 10).map((e) => e.id));
+    for (let i = bedEvents.length - 1; i >= 0; i--) if (remove.has(bedEvents[i].id)) bedEvents.splice(i, 1);
+  }
+}, 5000);
+
 function nextEmergencyId() {
   emergencySeq += 1;
   return `EMG-${emergencySeq}`;
@@ -172,6 +215,21 @@ function listBeds(city) {
     .sort((a, b) => b.general.available + b.icu.available - (a.general.available + a.icu.available));
 }
 
+function listBedEvents() {
+  const hosp = (id) => HOSPITALS.find((h) => h.id === id) || {};
+  return {
+    upcoming: bedEvents
+      .filter((e) => e.status === "upcoming")
+      .sort((a, b) => a.freesAt.localeCompare(b.freesAt))
+      .map((e) => ({ ...e, hospitalName: hosp(e.hospitalId).name, city: hosp(e.hospitalId).city })),
+    recent: bedEvents
+      .filter((e) => e.status === "applied")
+      .sort((a, b) => (b.appliedAt || "").localeCompare(a.appliedAt || ""))
+      .slice(0, 6)
+      .map((e) => ({ ...e, hospitalName: hosp(e.hospitalId).name }))
+  };
+}
+
 function createAmbulanceRequest(data) {
   const pool = ambulances.filter((a) => a.status === "AVAILABLE" && (!data.type || a.type === data.type));
   const unit = pool[0] || ambulances.find((a) => a.status === "AVAILABLE");
@@ -247,6 +305,7 @@ module.exports = {
   listAmbulances,
   listDoctors,
   listBeds,
+  listBedEvents,
   createAmbulanceRequest,
   getAmbulanceRequest,
   advanceAmbulanceRequest,
