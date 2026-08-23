@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=6" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
   <script>
     (function () {
       var t = localStorage.getItem("mr_theme");
@@ -35,6 +35,17 @@
       <span>⚠️</span>
       <span><b>Demo data:</b> Bed numbers hackathon MVP ke liye simulate kiye ja rahe hain (admissions/discharges). Real emergency mein hospital ko call karke confirm karein.</span>
     </div>
+
+    <section class="card" style="margin-bottom:1.2rem">
+      <h3 style="font-size:1.05rem;margin-bottom:.8rem">Filter by Bed Type <span style="font-weight:500;font-size:.82rem;color:var(--muted)">— tab karo, category view khul jayega</span></h3>
+      <div class="chips" id="bed-cat-chips">
+        <button class="chip selected" data-cat="all">📋 All Beds</button>
+        <button class="chip" data-cat="general">🛏️ General</button>
+        <button class="chip" data-cat="icu">🏥 ICU</button>
+        <button class="chip" data-cat="oxygen">🫁 Oxygen</button>
+        <button class="chip" data-cat="ventilator">💨 Ventilators</button>
+      </div>
+    </section>
 
     <section class="card" style="margin-bottom:1.2rem">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:.9rem">
@@ -66,9 +77,9 @@
 
   <footer id="footer"></footer>
 
-  <script src="js/app.js?v=6"></script>
-  <script src="js/hospitals-data.js?v=6"></script>
-  <script src="js/beds-data.js?v=6"></script>
-  <script src="js/beds.js?v=6"></script>
+  <script src="js/app.js?v=7"></script>
+  <script src="js/hospitals-data.js?v=7"></script>
+  <script src="js/beds-data.js?v=7"></script>
+  <script src="js/beds.js?v=7"></script>
 </body>
 </html>

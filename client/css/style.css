@@ -348,6 +348,28 @@ h1, h2, h3, h4 { line-height: 1.25; font-weight: 700; color: var(--navy-dark); }
 [data-theme="dark"] .event-card .event-countdown { color: #6fd3c7; }
 .event-card .event-sub { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--teal-dark); }
 [data-theme="dark"] .event-card .event-sub { color: #6fd3c7; }
+
+/* Clickable bed-type label (opens category view) */
+.bed-label.clickable {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+  padding: 0;
+  color: var(--text);
+  transition: color 0.15s ease;
+}
+.bed-label.clickable:hover { color: var(--primary); }
+
+/* Category view (single bed type across hospitals) */
+.cat-big-row { display: flex; align-items: baseline; justify-content: space-between; gap: 0.8rem; margin-top: 1rem; flex-wrap: wrap; }
+.cat-big { font-size: 2.1rem; font-weight: 900; color: var(--navy-dark); line-height: 1; font-variant-numeric: tabular-nums; }
+[data-theme="dark"] .cat-big { color: #eef3fa; }
+.cat-big small { font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+.bed-bar-lg { height: 14px; margin-top: 0.6rem; }
+.cat-soon { margin-top: 0.7rem; font-size: 0.88rem; color: var(--muted); }
+.cat-soon b { color: var(--teal-dark); }
+[data-theme="dark"] .cat-soon b { color: #6fd3c7; }
 .bed-row {
   display: grid;
   grid-template-columns: 110px 1fr 70px auto;

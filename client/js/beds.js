@@ -5,6 +5,7 @@ const BED_META = {
   ventilator: { label: "💨 Ventilator", one: "Ventilator" }
 };
 let cityFilter = "All";
+let categoryFilter = "all";
 let beds = [];
 let events = { upcoming: [], recent: [] };
 let usingFallback = false;
@@ -28,10 +29,38 @@ function catRow(hospitalId, key, cat) {
   const flashCls = flash ? (lastAvail[hospitalId] && cat.available > (lastAvail[hospitalId][key] ?? cat.available) ? "flash-up" : "flash-down") : "";
   return `
     <div class="bed-row">
-      <span class="bed-label">${BED_META[key].label}</span>
+      <button type="button" class="bed-label clickable" data-opencat="${key}" title="${BED_META[key].one} view kholo">${BED_META[key].label} ↗</button>
       <div class="bed-bar"><div class="bed-bar-fill ${st.cls === "badge-green" ? "ok" : st.cls === "badge-amber" ? "warn" : "full"}" style="width:${pct}%"></div></div>
       <span class="bed-count ${flashCls}">${cat.available} / ${cat.total}</span>
       <span class="badge ${st.cls}">${st.text}</span>
+    </div>`;
+}
+
+function categoryCard(b, k) {
+  const cat = b[k];
+  const pct = cat.total ? Math.round((cat.available / cat.total) * 100) : 0;
+  const st = bedStatus(cat);
+  const ev = events.upcoming.find((e) => e.hospitalId === b.hospitalId && e.category === k);
+  return `
+    <div class="card card-hover">
+      <div style="display:flex;justify-content:space-between;gap:.8rem;align-items:flex-start;flex-wrap:wrap">
+        <div>
+          <h3 style="font-size:1.02rem">🏥 ${b.name}</h3>
+          <p style="color:var(--muted);font-size:.85rem">${b.city}${b.emergency ? " • 🚨 Emergency" : ""}</p>
+        </div>
+        <span class="badge badge-green"><span class="online-dot"></span>Live</span>
+      </div>
+      <div class="cat-big-row">
+        <span class="cat-big">${cat.available}<small> / ${cat.total} ${BED_META[k].one}s</small></span>
+        <span class="badge ${st.cls}">${st.text}</span>
+      </div>
+      <div class="bed-bar bed-bar-lg"><div class="bed-bar-fill ${st.cls === "badge-green" ? "ok" : st.cls === "badge-amber" ? "warn" : "full"}" style="width:${pct}%"></div></div>
+      ${ev ? `<p class="cat-soon">⏱️ +${ev.count} more freeing in <b class="event-sub" data-freesat="${ev.freesAt}">${fmtCountdown(ev.freesAt)}</b></p>` : ""}
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.9rem">
+        ${b.phone ? `<a class="btn btn-sm btn-teal" href="tel:${b.phone}">📞 Call Hospital</a>` : ""}
+        <a class="btn btn-sm btn-primary" target="_blank" rel="noopener" href="${MR.directionsUrl(b.lat, b.lng)}">🧭 Directions</a>
+        <a class="btn btn-sm btn-ghost" href="ambulance.html">🚑 Send Ambulance</a>
+      </div>
     </div>`;
 }
 
@@ -103,6 +132,12 @@ function render() {
   const zone = document.getElementById("beds-list");
   document.getElementById("beds-count").textContent =
     `${beds.length} hospitals • ${totalAvailable()} beds free • updated ${MR.timeAgo(lastUpdated)}`;
+  if (categoryFilter !== "all") {
+    const k = categoryFilter;
+    const sorted = [...beds].sort((a, b) => b[k].available - a[k].available);
+    zone.innerHTML = sorted.map((b) => categoryCard(b, k)).join("");
+    return;
+  }
   zone.innerHTML = beds
     .map(
       (b) => `
@@ -180,7 +215,25 @@ async function loadEvents() {
   renderEvents();
 }
 
+function setCategory(cat) {
+  categoryFilter = cat;
+  document.querySelectorAll("#bed-cat-chips .chip").forEach((c) => c.classList.toggle("selected", c.dataset.cat === cat));
+  render();
+  const head = document.getElementById("beds-list");
+  if (head) head.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("#bed-cat-chips .chip").forEach((chip) =>
+    chip.addEventListener("click", () => setCategory(chip.dataset.cat))
+  );
+
+  // Bed-type labels inside hospital cards are clickable → open that category's view
+  document.getElementById("beds-list").addEventListener("click", (e) => {
+    const el = e.target.closest("[data-opencat]");
+    if (el) setCategory(el.dataset.opencat);
+  });
+
   document.querySelectorAll("#bed-city-chips .chip").forEach((chip) =>
     chip.addEventListener("click", () => {
       document.querySelectorAll("#bed-city-chips .chip").forEach((c) => c.classList.remove("selected"));
