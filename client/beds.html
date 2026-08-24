@@ -1,18 +1,18 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Live Bed Availability — MediRescue AI</title>
-  <meta name="description" content="Live hospital bed availability across Delhi & Noida — General, ICU, Oxygen and Ventilator beds with real-time updates." />
+  <title>Live Bed Availability â€” MediRescue AI</title>
+  <meta name="description" content="Live hospital bed availability across Delhi & Noida â€” General, ICU, Oxygen and Ventilator beds with real-time updates." />
   <meta name="theme-color" content="#14213d" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="apple-touch-icon" href="favicon.svg" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=10" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="css/style.css?v=11" />
   <script>
     (function () {
       var t = localStorage.getItem("mr_theme");
@@ -28,22 +28,22 @@
   <main class="container" id="main">
     <div class="page-head">
       <h1><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>Live Bed Availability</h1>
-      <p>Har hospital me General, ICU, Oxygen aur Ventilator beds ki <b>live</b> status — har 10 second me update, plus <b>kitne minute baad kitne beds free honge</b> ka countdown.</p>
+      <p>Har hospital me General, ICU, Oxygen aur Ventilator beds ki <b>live</b> status â€” har 10 second me update, plus <b>kitne minute baad kitne beds free honge</b> ka countdown.</p>
     </div>
 
     <div class="disclaimer" style="margin-bottom:1.2rem">
-      <span>⚠️</span>
+      <span>âš ï¸</span>
       <span><b>Demo data:</b> Bed numbers hackathon MVP ke liye simulate kiye ja rahe hain (admissions/discharges). Real emergency mein hospital ko call karke confirm karein.</span>
     </div>
 
     <section class="card" style="margin-bottom:1.2rem">
-      <h3 style="font-size:1.05rem;margin-bottom:.8rem">Filter by Bed Type <span style="font-weight:500;font-size:.82rem;color:var(--muted)">— tab karo, category view khul jayega</span></h3>
+      <h3 style="font-size:1.05rem;margin-bottom:.8rem">Filter by Bed Type <span style="font-weight:500;font-size:.82rem;color:var(--muted)">â€” tab karo, category view khul jayega</span></h3>
       <div class="chips" id="bed-cat-chips">
-        <button class="chip selected" data-cat="all">📋 All Beds</button>
-        <button class="chip" data-cat="general">🛏️ General</button>
-        <button class="chip" data-cat="icu">🏥 ICU</button>
-        <button class="chip" data-cat="oxygen">🫁 Oxygen</button>
-        <button class="chip" data-cat="ventilator">💨 Ventilators</button>
+        <button class="chip selected" data-cat="all">ðŸ“‹ All Beds</button>
+        <button class="chip" data-cat="general">ðŸ›ï¸ General</button>
+        <button class="chip" data-cat="icu">ðŸ¥ ICU</button>
+        <button class="chip" data-cat="oxygen">ðŸ« Oxygen</button>
+        <button class="chip" data-cat="ventilator">ðŸ’¨ Ventilators</button>
       </div>
     </section>
 
@@ -53,22 +53,22 @@
         <span id="beds-count" style="color:var(--muted);font-size:.9rem"></span>
       </div>
       <div class="chips" id="bed-city-chips">
-        <button class="chip selected" data-city="All">🏥 All Hospitals</button>
-        <button class="chip" data-city="Delhi">🏙️ Delhi</button>
-        <button class="chip" data-city="Noida">🌆 Noida</button>
+        <button class="chip selected" data-city="All">ðŸ¥ All Hospitals</button>
+        <button class="chip" data-city="Delhi">ðŸ™ï¸ Delhi</button>
+        <button class="chip" data-city="Noida">ðŸŒ† Noida</button>
       </div>
     </section>
 
     <div id="beds-summary" class="grid grid-4" style="margin-bottom:1.4rem"></div>
 
     <section class="card" style="margin-bottom:1.4rem">
-      <h3 style="font-size:1.05rem;margin-bottom:.3rem">⏱️ Freeing Soon — Predicted Discharges</h3>
-      <p style="font-size:.85rem;color:var(--muted);margin-bottom:.9rem">Kitne time baad kitne beds free honge — countdown khatam hote hi beds sach me free ho jaate hain (demo simulation).</p>
+      <h3 style="font-size:1.05rem;margin-bottom:.3rem">â±ï¸ Freeing Soon â€” Predicted Discharges</h3>
+      <p style="font-size:.85rem;color:var(--muted);margin-bottom:.9rem">Kitne time baad kitne beds free honge â€” countdown khatam hote hi beds sach me free ho jaate hain (demo simulation).</p>
       <div id="beds-events" class="grid grid-3"></div>
     </section>
 
     <section class="card" style="margin-bottom:1.4rem">
-      <h3 style="font-size:1.05rem;margin-bottom:.6rem">📡 Live Activity</h3>
+      <h3 style="font-size:1.05rem;margin-bottom:.6rem">ðŸ“¡ Live Activity</h3>
       <div id="beds-feed" class="timeline"></div>
     </section>
 
@@ -77,9 +77,9 @@
 
   <footer id="footer"></footer>
 
-  <script src="js/app.js?v=10"></script>
-  <script src="js/hospitals-data.js?v=10"></script>
-  <script src="js/beds-data.js?v=10"></script>
-  <script src="js/beds.js?v=10"></script>
+  <script src="js/app.js?v=11"></script>
+  <script src="js/hospitals-data.js?v=11"></script>
+  <script src="js/beds-data.js?v=11"></script>
+  <script src="js/beds.js?v=11"></script>
 </body>
 </html>

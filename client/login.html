@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Login / Register — MediRescue AI</title>
+  <title>Login / Register â€” MediRescue AI</title>
   <meta name="description" content="Login or create a MediRescue AI account to access your emergency profile, SOS history and operations dashboard." />
   <meta name="theme-color" content="#14213d" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -11,8 +11,8 @@
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=10" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="css/style.css?v=11" />
   <script>
     (function () {
       var t = localStorage.getItem("mr_theme");
@@ -27,7 +27,7 @@
 
   <div class="auth-wrap" id="main">
     <div class="card auth-card">
-      <h2 style="text-align:center;margin-bottom:.3rem">🔐 Welcome</h2>
+      <h2 style="text-align:center;margin-bottom:.3rem">ðŸ” Welcome</h2>
       <p id="auth-hint" style="text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:1.2rem">Login to access your emergency profile &amp; SOS history.</p>
       <div class="auth-tabs">
         <button id="tab-login" class="active" type="button">Login</button>
@@ -41,9 +41,9 @@
         </div>
         <div class="form-group">
           <label for="login-password">Password</label>
-          <input type="password" id="login-password" placeholder="••••••••" required minlength="6" autocomplete="current-password" />
+          <input type="password" id="login-password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required minlength="6" autocomplete="current-password" />
         </div>
-        <button type="submit" class="btn btn-primary btn-block btn-lg">Login →</button>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Login â†’</button>
       </form>
 
       <form id="register-form" style="display:none">
@@ -73,18 +73,18 @@
             </select>
           </div>
         </div>
-        <button type="submit" class="btn btn-teal btn-block btn-lg">Create Account 🎉</button>
+        <button type="submit" class="btn btn-teal btn-block btn-lg">Create Account ðŸŽ‰</button>
       </form>
 
       <div style="margin-top:1rem;text-align:center">
-        <button id="demo-login" class="btn btn-ghost btn-sm" type="button">⚡ Quick Demo Login (no server needed)</button>
+        <button id="demo-login" class="btn btn-ghost btn-sm" type="button">âš¡ Quick Demo Login (no server needed)</button>
       </div>
     </div>
   </div>
 
   <footer id="footer"></footer>
 
-  <script src="js/app.js?v=10"></script>
-  <script src="js/auth.js?v=10"></script>
+  <script src="js/app.js?v=11"></script>
+  <script src="js/auth.js?v=11"></script>
 </body>
 </html>

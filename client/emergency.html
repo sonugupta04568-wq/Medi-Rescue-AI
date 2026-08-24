@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Emergency SOS — MediRescue AI</title>
+  <title>Emergency SOS â€” MediRescue AI</title>
   <meta name="description" content="One-tap Smart SOS: direct call to the rescue line, GPS location capture, emergency record creation and contact alerts in seconds." />
   <meta name="theme-color" content="#14213d" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -11,9 +11,9 @@
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=10" />
-  <link rel="stylesheet" href="css/emergency.css?v=10" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="css/style.css?v=11" />
+  <link rel="stylesheet" href="css/emergency.css?v=11" />
   <script>
     (function () {
       var t = localStorage.getItem("mr_theme");
@@ -29,35 +29,35 @@
   <main class="container" id="main">
     <div class="page-head">
       <h1><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 12a5 5 0 0 1 10 0v6H7v-6Z"/><path d="M5 20h14"/><path d="M12 2v2"/><path d="M4.9 5.6 6.3 7"/><path d="M19.1 5.6 17.7 7"/><path d="M9 12a3 3 0 0 1 6 0"/></svg>Smart SOS System</h1>
-      <p>Ek click: 📞 direct call <b>+91 93358 70885</b> par • location captured → emergency created → contacts alerted.</p>
+      <p>Ek click: ðŸ“ž direct call <b>+91 93358 70885</b> par â€¢ location captured â†’ emergency created â†’ contacts alerted.</p>
     </div>
 
     <div class="grid grid-2" style="align-items:start">
       <section class="sos-stage">
         <button id="sos-btn" class="sos-btn" aria-label="Trigger emergency SOS">SOS<small>PRESS IN EMERGENCY</small></button>
         <div class="sos-status">
-          <div class="big" id="sos-status-big">Ready to help you 24×7</div>
-          <div class="sub" id="sos-status-sub">Press the button — we'll handle the rest.</div>
+          <div class="big" id="sos-status-big">Ready to help you 24Ã—7</div>
+          <div class="sub" id="sos-status-sub">Press the button â€” we'll handle the rest.</div>
         </div>
-        <span class="loc-pill" id="loc-pill">📍 Location not captured yet</span>
-        <a id="rescue-call-banner" class="rescue-banner" href="tel:+919335870885">📞 Direct Call — Rescue Line +91 93358 70885</a>
+        <span class="loc-pill" id="loc-pill">ðŸ“ Location not captured yet</span>
+        <a id="rescue-call-banner" class="rescue-banner" href="tel:+919335870885">ðŸ“ž Direct Call â€” Rescue Line +91 93358 70885</a>
         <div style="display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center">
-          <a href="tel:112" class="btn btn-sm btn-ghost">📞 112 Emergency</a>
-          <a href="tel:108" class="btn btn-sm btn-ghost">🚑 108 Ambulance</a>
-          <a href="assistant.html" class="btn btn-sm btn-teal">🤖 AI Guidance</a>
+          <a href="tel:112" class="btn btn-sm btn-ghost">ðŸ“ž 112 Emergency</a>
+          <a href="tel:108" class="btn btn-sm btn-ghost">ðŸš‘ 108 Ambulance</a>
+          <a href="assistant.html" class="btn btn-sm btn-teal">ðŸ¤– AI Guidance</a>
         </div>
       </section>
 
       <section class="card">
-        <h3 style="font-size:1.05rem;margin-bottom:.8rem">⚡ Live Emergency Status</h3>
+        <h3 style="font-size:1.05rem;margin-bottom:.8rem">âš¡ Live Emergency Status</h3>
         <div id="priority-banner" class="priority-banner critical" style="display:none;margin-bottom:1rem"></div>
         <div class="timeline" id="sos-timeline">
-          <div class="timeline-item"><div class="t-label">Waiting for SOS trigger…</div><div class="t-time">Press the SOS button to begin</div></div>
+          <div class="timeline-item"><div class="t-label">Waiting for SOS triggerâ€¦</div><div class="t-time">Press the SOS button to begin</div></div>
         </div>
         <div id="post-sos-actions" style="display:none;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap">
-          <a href="ambulance.html" class="btn btn-sm btn-primary">🚑 Request Ambulance</a>
-          <a href="hospitals.html" class="btn btn-sm btn-navy">🏥 Nearby Hospitals</a>
-          <button class="btn btn-sm btn-teal" id="resolve-btn" type="button">✅ Mark Resolved</button>
+          <a href="ambulance.html" class="btn btn-sm btn-primary">ðŸš‘ Request Ambulance</a>
+          <a href="hospitals.html" class="btn btn-sm btn-navy">ðŸ¥ Nearby Hospitals</a>
+          <button class="btn btn-sm btn-teal" id="resolve-btn" type="button">âœ… Mark Resolved</button>
         </div>
         <div id="wa-alerts" style="display:none;gap:.6rem;margin-top:.9rem;flex-wrap:wrap;padding-top:.9rem;border-top:1px dashed var(--border)"></div>
       </section>
@@ -65,15 +65,15 @@
 
     <div class="grid grid-2" style="margin-top:1.5rem;align-items:start">
       <section class="card">
-        <h3 style="font-size:1.05rem;margin-bottom:.8rem">🧠 Emergency Severity Classification</h3>
+        <h3 style="font-size:1.05rem;margin-bottom:.8rem">ðŸ§  Emergency Severity Classification</h3>
         <p style="font-size:.85rem;color:var(--muted);margin-bottom:.8rem">Select symptoms to get an <b>Emergency Priority Recommendation</b> (not a medical diagnosis).</p>
         <div class="symptom-grid">
-          <label class="symptom-check"><input type="checkbox" value="Severe bleeding" />🩸 Severe bleeding</label>
-          <label class="symptom-check"><input type="checkbox" value="Chest pain" />❤️ Chest pain</label>
-          <label class="symptom-check"><input type="checkbox" value="Difficulty breathing" />😮‍💨 Difficulty breathing</label>
-          <label class="symptom-check"><input type="checkbox" value="Unconsciousness" />😵 Unconsciousness</label>
-          <label class="symptom-check"><input type="checkbox" value="Major accident" />💥 Major accident</label>
-          <label class="symptom-check"><input type="checkbox" value="Severe burn" />🔥 Severe burn</label>
+          <label class="symptom-check"><input type="checkbox" value="Severe bleeding" />ðŸ©¸ Severe bleeding</label>
+          <label class="symptom-check"><input type="checkbox" value="Chest pain" />â¤ï¸ Chest pain</label>
+          <label class="symptom-check"><input type="checkbox" value="Difficulty breathing" />ðŸ˜®â€ðŸ’¨ Difficulty breathing</label>
+          <label class="symptom-check"><input type="checkbox" value="Unconsciousness" />ðŸ˜µ Unconsciousness</label>
+          <label class="symptom-check"><input type="checkbox" value="Major accident" />ðŸ’¥ Major accident</label>
+          <label class="symptom-check"><input type="checkbox" value="Severe burn" />ðŸ”¥ Severe burn</label>
         </div>
         <div style="display:flex;align-items:center;gap:.7rem;margin-top:1rem">
           <span style="font-weight:700;font-size:.9rem;color:var(--navy)">Recommended priority:</span>
@@ -86,7 +86,7 @@
       </section>
 
       <section class="card" id="emc">
-        <h3 style="font-size:1.05rem;margin-bottom:.8rem">👤 Digital Emergency Card</h3>
+        <h3 style="font-size:1.05rem;margin-bottom:.8rem">ðŸ‘¤ Digital Emergency Card</h3>
         <div class="emc-card" id="emc-card"></div>
         <form id="profile-form" style="margin-top:1.2rem">
           <div class="grid grid-2" style="gap:.8rem">
@@ -98,34 +98,34 @@
             </div>
             <div class="form-group"><label for="pf-allergies">Allergies</label><input type="text" id="pf-allergies" placeholder="e.g., Penicillin" /></div>
           </div>
-          <div class="form-group"><label for="pf-notes">Emergency Notes</label><textarea id="pf-notes" rows="2" placeholder="Conditions, medications…"></textarea></div>
-          <button type="submit" class="btn btn-sm btn-navy">💾 Save Card</button>
+          <div class="form-group"><label for="pf-notes">Emergency Notes</label><textarea id="pf-notes" rows="2" placeholder="Conditions, medicationsâ€¦"></textarea></div>
+          <button type="submit" class="btn btn-sm btn-navy">ðŸ’¾ Save Card</button>
         </form>
       </section>
     </div>
 
     <section class="card" style="margin-top:1.5rem">
-      <h3 style="font-size:1.05rem;margin-bottom:.8rem">👨‍👩‍👦 Emergency Contacts</h3>
+      <h3 style="font-size:1.05rem;margin-bottom:.8rem">ðŸ‘¨â€ðŸ‘©â€ðŸ‘¦ Emergency Contacts</h3>
       <p style="font-size:.85rem;color:var(--muted);margin-bottom:.9rem">These contacts are alerted with your live location when SOS is triggered.</p>
       <div id="contacts-list"></div>
       <form id="contact-form" class="grid grid-4" style="gap:.7rem;margin-top:1rem;align-items:end">
         <div class="form-group" style="margin:0"><label for="ct-name">Name</label><input type="text" id="ct-name" placeholder="Contact name" /></div>
         <div class="form-group" style="margin:0"><label for="ct-phone">Phone</label><input type="tel" id="ct-phone" placeholder="+91-" /></div>
         <div class="form-group" style="margin:0"><label for="ct-relation">Relation</label><input type="text" id="ct-relation" placeholder="Family / Friend" /></div>
-        <button type="submit" class="btn btn-primary">➕ Add Contact</button>
+        <button type="submit" class="btn btn-primary">âž• Add Contact</button>
       </form>
     </section>
   </main>
 
   <!-- Sticky mobile call bar: rescue line always one thumb-tap away -->
   <div class="sos-sticky-bar">
-    <a href="tel:+919335870885" class="btn btn-primary btn-lg">📞 Call Rescue Line</a>
-    <a href="tel:108" class="btn btn-navy btn-lg">🚑 108</a>
+    <a href="tel:+919335870885" class="btn btn-primary btn-lg">ðŸ“ž Call Rescue Line</a>
+    <a href="tel:108" class="btn btn-navy btn-lg">ðŸš‘ 108</a>
   </div>
 
   <footer id="footer"></footer>
 
-  <script src="js/app.js?v=10"></script>
-  <script src="js/sos.js?v=10"></script>
+  <script src="js/app.js?v=11"></script>
+  <script src="js/sos.js?v=11"></script>
 </body>
 </html>

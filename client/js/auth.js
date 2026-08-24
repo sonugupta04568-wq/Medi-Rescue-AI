@@ -20,25 +20,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = document.getElementById("login-password").value;
     const btn = loginForm.querySelector("button[type=submit]");
     btn.disabled = true;
+    btn.dataset.orig = btn.textContent;
+    btn.textContent = "⏳ Logging in…";
     const res = await MR.api("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
     if (res && res.token) {
       localStorage.setItem("mr_token", res.token);
       localStorage.setItem("mr_user", JSON.stringify(res.user));
       MR.toast("✅ Welcome back, " + res.user.name, "success");
-      setTimeout(() => (window.location.href = "dashboard.html"), 600);
-    } else {
-      // Offline fallback: verify against a SHA-256 hash — never store plaintext passwords.
-      const known = JSON.parse(localStorage.getItem("mr_local_users") || "{}");
-      const hash = await MR.sha256(password);
-      if (known[email] && known[email].hash === hash) {
-        localStorage.setItem("mr_demo", "1");
-        localStorage.setItem("mr_user", JSON.stringify({ name: known[email].name || email.split("@")[0], email }));
-        window.location.href = "dashboard.html";
-      } else {
-        MR.toast("⚠️ Server unreachable. Use demo login: demo@medirescue.ai / demo123", "warn");
-      }
+      setTimeout(() => (window.location.href = "dashboard.html"), 150);
+      return;
     }
-    btn.disabled = false;
+    const known = JSON.parse(localStorage.getItem("mr_local_users") || "{}");
+    const hash = await MR.sha256(password);
+    if (known[email] && known[email].hash === hash) {
+      localStorage.setItem("mr_demo", "1");
+      localStorage.setItem("mr_user", JSON.stringify({ name: known[email].name || email.split("@")[0], email }));
+      MR.toast("⚡ Logged in (offline mode)", "success");
+      setTimeout(() => (window.location.href = "dashboard.html"), 150);
+    } else {
+      btn.disabled = false;
+      btn.textContent = btn.dataset.orig || "Login →";
+      MR.toast(known[email] ? "❌ Wrong password" : "❌ Account not found — Register tab se banao (offline bhi chalega)", "error");
+    }
   });
 
   registerForm.addEventListener("submit", async (e) => {
@@ -52,23 +55,23 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     const btn = registerForm.querySelector("button[type=submit]");
     btn.disabled = true;
+    btn.dataset.orig = btn.textContent;
+    btn.textContent = "⏳ Creating Account…";
+    const hash = await MR.sha256(payload.password);
     const res = await MR.api("/auth/register", { method: "POST", body: JSON.stringify(payload) });
+    const known = JSON.parse(localStorage.getItem("mr_local_users") || "{}");
+    known[payload.email] = { name: payload.name, hash };
+    localStorage.setItem("mr_local_users", JSON.stringify(known));
+    delete payload.password;
+    localStorage.setItem("mr_demo", "1");
+    localStorage.setItem("mr_user", JSON.stringify({ name: payload.name, email: payload.email }));
     if (res && res.token) {
       localStorage.setItem("mr_token", res.token);
-      localStorage.setItem("mr_user", JSON.stringify(res.user));
       MR.toast("🎉 Account created!", "success");
-      setTimeout(() => (window.location.href = "dashboard.html"), 600);
     } else {
-      const known = JSON.parse(localStorage.getItem("mr_local_users") || "{}");
-      known[payload.email] = { name: payload.name, hash: await MR.sha256(payload.password) };
-      localStorage.setItem("mr_local_users", JSON.stringify(known));
-      delete payload.password;
-      localStorage.setItem("mr_demo", "1");
-      localStorage.setItem("mr_user", JSON.stringify({ name: payload.name, email: payload.email }));
-      MR.toast("📴 Offline mode — account saved locally", "warn");
-      setTimeout(() => (window.location.href = "dashboard.html"), 700);
+      MR.toast("⚡ Account created (saved on this device)", "success");
     }
-    btn.disabled = false;
+    setTimeout(() => (window.location.href = "dashboard.html"), 250);
   });
 
   const demoBtn = document.getElementById("demo-login");

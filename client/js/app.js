@@ -1,6 +1,11 @@
-const API_BASE =
-  (location.protocol === "https:" ? "https://" : "http://") +
-  (location.hostname || "localhost") + ":5000/api";
+/* API base: same-origin jab Express server serve kare (fast), warna turant offline demo mode.
+   Custom backend ke liye: localStorage.setItem("mr_api_base", "http://<ip>:5000/api") */
+const API_BASE = (() => {
+  const saved = localStorage.getItem("mr_api_base");
+  if (saved) return saved;
+  if (location.port === "5000") return location.origin + "/api";
+  return null; // static hosting (GitHub Pages etc.) / file:// — backend nahi hai, network try mat karo
+})();
 
 /* ---------- SVG icon set (Lucide-style, stroke-based) ---------- */
 const ICONS = {
@@ -71,10 +76,18 @@ const MR = {
   demo: localStorage.getItem("mr_demo") === "1",
 
   async api(path, options = {}) {
+    if (!API_BASE) {
+      // Backend nahi hai (static hosting) — turant offline demo mode, network ka wait nahi
+      MR.demo = true;
+      localStorage.setItem("mr_demo", "1");
+      return null;
+    }
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 2500); // kabhi hang na ho — jaldi offline fallback
     try {
       const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
       if (MR.token) headers.Authorization = "Bearer " + MR.token;
-      const res = await fetch(API_BASE + path, { ...options, headers });
+      const res = await fetch(API_BASE + path, { ...options, headers, signal: ctrl.signal });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error || "Request failed");
@@ -85,6 +98,8 @@ const MR = {
       MR.demo = true;
       localStorage.setItem("mr_demo", "1");
       return null;
+    } finally {
+      clearTimeout(timer);
     }
   },
 

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>AI Emergency Assistant — MediRescue AI</title>
+  <title>AI Emergency Assistant â€” MediRescue AI</title>
   <meta name="description" content="Describe the emergency in Hindi or English and get instant first-aid guidance and urgency triage from the MediRescue AI assistant." />
   <meta name="theme-color" content="#14213d" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -11,8 +11,8 @@
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=10" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="css/style.css?v=11" />
   <script>
     (function () {
       var t = localStorage.getItem("mr_theme");
@@ -28,40 +28,40 @@
   <main class="container" id="main">
     <div class="page-head">
       <h1><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V4M9 4h6"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg>AI Emergency Assistant</h1>
-      <p>Describe the emergency in Hindi or English — get instant first-aid guidance and urgency recommendation.</p>
+      <p>Describe the emergency in Hindi or English â€” get instant first-aid guidance and urgency recommendation.</p>
     </div>
 
     <div class="disclaimer" style="margin-bottom:1.2rem">
-      <span>⚠️</span>
-      <span><b>Disclaimer:</b> MediRescue AI does not replace doctors or emergency services. This is guidance and triage support only — not a medical diagnosis. In a life-threatening emergency, contact official emergency services (112 / 108) immediately.</span>
+      <span>âš ï¸</span>
+      <span><b>Disclaimer:</b> MediRescue AI does not replace doctors or emergency services. This is guidance and triage support only â€” not a medical diagnosis. In a life-threatening emergency, contact official emergency services (112 / 108) immediately.</span>
     </div>
 
     <div class="grid grid-2" style="align-items:start">
       <div class="chat-window">
         <div style="padding:.8rem 1.2rem;background:var(--header-grad);color:#fff;font-weight:700;display:flex;justify-content:space-between;align-items:center">
-          <span>🤖 MediRescue AI — Triage Support</span>
-          <span class="badge badge-green" style="background:rgba(22,163,74,.25);color:#7ef0a5">● Online</span>
+          <span>ðŸ¤– MediRescue AI â€” Triage Support</span>
+          <span class="badge badge-green" style="background:rgba(22,163,74,.25);color:#7ef0a5">â— Online</span>
         </div>
         <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
         <form id="chat-form" class="chat-input-bar">
           <label for="chat-input" class="skip-link">Describe the emergency</label>
-          <input type="text" id="chat-input" placeholder="e.g., My friend is bleeding badly… (Hindi bhi chalega)" autocomplete="off" />
-          <button type="submit" class="btn btn-primary">Send ➤</button>
+          <input type="text" id="chat-input" placeholder="e.g., My friend is bleeding badlyâ€¦ (Hindi bhi chalega)" autocomplete="off" />
+          <button type="submit" class="btn btn-primary">Send âž¤</button>
         </form>
       </div>
 
       <div>
         <div class="card" style="margin-bottom:1.2rem">
-          <h3 style="font-size:1rem;margin-bottom:.6rem">⚡ Quick Scenarios</h3>
+          <h3 style="font-size:1rem;margin-bottom:.6rem">âš¡ Quick Scenarios</h3>
           <p style="font-size:.85rem;color:var(--muted);margin-bottom:.8rem">Tap to try instantly:</p>
           <div class="chips" id="quick-chips"></div>
         </div>
         <div class="card">
-          <h3 style="font-size:1rem;margin-bottom:.6rem">🧠 How it works</h3>
+          <h3 style="font-size:1rem;margin-bottom:.6rem">ðŸ§  How it works</h3>
           <ul class="flow-list">
             <li><span class="dot" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark))">1</span> You describe the emergency (EN/HI)</li>
             <li><span class="dot" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark))">2</span> AI detects emergency intent &amp; category</li>
-            <li><span class="dot" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark))">3</span> Risk priority: LOW → CRITICAL</li>
+            <li><span class="dot" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark))">3</span> Risk priority: LOW â†’ CRITICAL</li>
             <li><span class="dot" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark))">4</span> Safe first-aid steps + escalation advice</li>
             <li><span class="dot" style="background:linear-gradient(135deg,var(--teal),var(--teal-dark))">5</span> One-tap SOS / Ambulance / Hospital actions</li>
           </ul>
@@ -72,7 +72,7 @@
 
   <footer id="footer"></footer>
 
-  <script src="js/app.js?v=10"></script>
-  <script src="js/ai.js?v=10"></script>
+  <script src="js/app.js?v=11"></script>
+  <script src="js/ai.js?v=11"></script>
 </body>
 </html>
