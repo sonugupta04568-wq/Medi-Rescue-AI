@@ -61,7 +61,11 @@ function vibrate(pattern) {
 }
 
 function dialRescue() {
-  window.location.href = "tel:" + RESCUE_NUMBER;
+  if (window.CallUI) {
+    CallUI.open("MediRescue Rescue Line", RESCUE_DISPLAY);
+  } else {
+    window.location.href = "tel:" + RESCUE_NUMBER;
+  }
 }
 
 function mapsLink(loc) {
@@ -259,7 +263,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const callBanner = document.getElementById("rescue-call-banner");
   if (callBanner) {
     callBanner.href = "tel:" + RESCUE_NUMBER;
-    callBanner.textContent = `📞 Direct Call — Rescue Line ${RESCUE_DISPLAY}`;
+    callBanner.textContent = `📞 Live Call — Rescue Line ${RESCUE_DISPLAY}`;
+    callBanner.addEventListener("click", (e) => {
+      e.preventDefault();
+      dialRescue();
+    });
   }
 
   const typeSel = document.getElementById("sos-type");
