@@ -10,6 +10,7 @@ const doctorRoutes = require("./routes/doctorRoutes");
 const ambulanceRoutes = require("./routes/ambulanceRoutes");
 const bloodRoutes = require("./routes/bloodRoutes");
 const bedsRoutes = require("./routes/bedsRoutes");
+const callRoutes = require("./routes/callRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const { getStats } = require("./store");
 
@@ -20,7 +21,7 @@ app.use((req, res, next) => {
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-Frame-Options", "DENY");
   res.setHeader("Referrer-Policy", "same-origin");
-  res.setHeader("Permissions-Policy", "geolocation=(self), camera=(), microphone=()");
+    res.setHeader("Permissions-Policy", "geolocation=(self), camera=(self), microphone=(self)");
   next();
 });
 
@@ -65,6 +66,7 @@ app.use("/api/doctors", doctorRoutes);
 app.use("/api/ambulance", ambulanceRoutes);
 app.use("/api/blood", bloodRoutes);
 app.use("/api/beds", bedsRoutes);
+app.use("/api/call", callRoutes);
 app.use("/api/ai", aiRoutes);
 
 app.use((req, res, next) => {
