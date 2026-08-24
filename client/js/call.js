@@ -4,7 +4,8 @@ const CallUI = (() => {
   let tick = null;
   let seconds = 0;
   let el = null;
-  let activeNumber = "";
+  let mode = null;
+  let stream = null;
 
   function audio() {
     ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
@@ -48,93 +49,164 @@ const CallUI = (() => {
     return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
   }
 
-  function ensureDom() {
-    if (el) return;
-    el = document.createElement("div");
-    el.className = "call-overlay";
-    el.id = "call-overlay";
-    el.innerHTML = `
+  function stopStream() {
+    if (stream) {
+      stream.getTracks().forEach((t) => t.stop());
+      stream = null;
+    }
+  }
+
+  function build(m) {
+    const d = document.createElement("div");
+    d.className = "call-overlay";
+    const media =
+      m === "video"
+        ? `<div class="call-video-wrap" id="call-video-wrap">
+             <video id="call-video" autoplay playsinline muted></video>
+             <span class="call-live-dot" id="call-live-dot">● LIVE</span>
+           </div>`
+        : `<div class="call-avatar">🚑</div>`;
+    d.innerHTML = `
       <div class="call-card">
-        <div class="call-avatar">🚑</div>
-        <h3 id="call-name">Rescue Line</h3>
+        ${media}
+        <h3 id="call-name"></h3>
         <p id="call-number"></p>
         <p id="call-status">Calling…</p>
         <div class="call-timer" id="call-timer" style="display:none">00:00</div>
-        <div class="call-controls">
-          <button class="call-btn" id="call-mute" type="button"><span>🎤</span><small>Mute</small></button>
-          <button class="call-btn" id="call-speaker" type="button"><span>🔊</span><small>Speaker</small></button>
-          <button class="call-btn end" id="call-end" type="button"><span>📵</span><small>End</small></button>
-        </div>
+        <div class="call-controls" id="call-controls"></div>
       </div>`;
+    return d;
+  }
+
+  function makeBtn(id, icon, label, extra) {
+    return `<button class="call-btn ${extra || ""}" id="${id}" type="button"><span>${icon}</span><small>${label}</small></button>`;
+  }
+
+  function ensureDom(m) {
+    close();
+    mode = m;
+    el = build(m);
     document.body.appendChild(el);
-    document.getElementById("call-mute").addEventListener("click", (e) => {
-      const b = e.currentTarget;
-      b.classList.toggle("active");
-      b.querySelector("span").textContent = b.classList.contains("active") ? "🔇" : "🎤";
-    });
-    document.getElementById("call-speaker").addEventListener("click", (e) => {
-      const b = e.currentTarget;
-      b.classList.toggle("active");
-    });
+    const controls = document.getElementById("call-controls");
+    if (m === "voice") {
+      controls.innerHTML = makeBtn("call-mute", "🎤", "Mute") + makeBtn("call-speaker", "🔊", "Speaker") + makeBtn("call-end", "📵", "End", "end");
+    } else {
+      controls.innerHTML = makeBtn("call-mic", "🎙️", "Mic") + makeBtn("call-cam", "🎥", "Camera") + makeBtn("call-end", "📵", "End", "end");
+    }
     document.getElementById("call-end").addEventListener("click", hangup);
+
+    const micBtn = document.getElementById("call-mute") || document.getElementById("call-mic");
+    if (micBtn)
+      micBtn.addEventListener("click", () => {
+        micBtn.classList.toggle("active");
+        const on = !micBtn.classList.contains("active");
+        micBtn.querySelector("span").textContent = on ? (m === "voice" ? "🎤" : "🎙️") : "🔇";
+        micBtn.querySelector("small").textContent = on ? (m === "voice" ? "Mute" : "Mic") : "Muted";
+        if (stream) {
+          stream.getAudioTracks().forEach((t) => (t.enabled = false));
+          stream.getAudioTracks().forEach((t) => (t.enabled = on));
+        }
+      });
+
+    const camBtn = document.getElementById("call-cam");
+    if (camBtn)
+      camBtn.addEventListener("click", () => {
+        camBtn.classList.toggle("active");
+        const on = !camBtn.classList.contains("active");
+        if (stream) stream.getVideoTracks().forEach((t) => (t.enabled = on));
+      });
+
+    const spkBtn = document.getElementById("call-speaker");
+    if (spkBtn) spkBtn.addEventListener("click", () => spkBtn.classList.toggle("active"));
+  }
+
+  function startTick(statusText) {
+    stopRing();
+    document.getElementById("call-status").textContent = statusText;
+    const timerEl = document.getElementById("call-timer");
+    timerEl.style.display = "block";
+    timerEl.textContent = "00:00";
+    if (navigator.vibrate) navigator.vibrate(120);
+    tick = setInterval(() => {
+      seconds++;
+      timerEl.textContent = fmt(seconds);
+    }, 1000);
   }
 
   function hangup() {
+    const wasVisible = el && el.classList.contains("show");
     stopRing();
     if (tick) clearInterval(tick);
     tick = null;
-    const status = document.getElementById("call-status");
-    if (status && el && el.classList.contains("show")) {
-      status.textContent = `Call ended • ${fmt(seconds)}`;
+    if (wasVisible) {
+      const status = document.getElementById("call-status");
+      if (status) status.textContent = `Call ended • ${fmt(seconds)}`;
     }
+    stopStream();
     setTimeout(close, 1400);
   }
 
   function close() {
     if (!el) return;
-    el.classList.remove("show");
+    el.remove();
+    el = null;
     stopRing();
     if (tick) clearInterval(tick);
     tick = null;
+    stopStream();
+  }
+
+  function isMobile() {
+    return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  }
+
+  function handoffToDialer(number) {
+    document.getElementById("call-status").textContent = "Connecting to phone dialer…";
+    setTimeout(() => {
+      stopRing();
+      window.location.href = "tel:" + String(number).replace(/[^+0-9]/g, "");
+    }, 1200);
   }
 
   function open(name, number) {
     seconds = 0;
-    activeNumber = number;
-    ensureDom();
+    ensureDom("voice");
     el.classList.add("show");
     document.getElementById("call-name").textContent = name || "Rescue Line";
     document.getElementById("call-number").textContent = number;
-    document.getElementById("call-status").textContent = "Calling…";
-    document.getElementById("call-timer").style.display = "none";
-    document.querySelectorAll(".call-btn").forEach((b) => b.classList.remove("active"));
-    document.querySelector("#call-mute span").textContent = "🎤";
     startRing();
     if (navigator.vibrate) navigator.vibrate([250, 150, 250]);
-
-    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-    if (isMobile) {
-      document.getElementById("call-status").textContent = "Connecting to phone dialer…";
-      setTimeout(() => {
-        stopRing();
-        window.location.href = "tel:" + String(number).replace(/[^+0-9]/g, "");
-      }, 1200);
-      return;
-    }
+    if (isMobile()) return handoffToDialer(number);
     setTimeout(() => {
-      if (!el.classList.contains("show")) return;
-      stopRing();
-      document.getElementById("call-status").textContent = "Connected — Live Call";
-      const timerEl = document.getElementById("call-timer");
-      timerEl.style.display = "block";
-      timerEl.textContent = "00:00";
-      if (navigator.vibrate) navigator.vibrate(120);
-      tick = setInterval(() => {
-        seconds++;
-        timerEl.textContent = fmt(seconds);
-      }, 1000);
+      if (!document.getElementById("call-status")) return;
+      startTick("Connected — Live Call");
     }, 2600);
   }
 
-  return { open, close, hangup };
+  async function openVideo(name, number) {
+    seconds = 0;
+    ensureDom("video");
+    el.classList.add("show");
+    document.getElementById("call-name").textContent = name || "Rescue Line";
+    document.getElementById("call-number").textContent = number;
+    document.getElementById("call-status").textContent = "Requesting camera…";
+    beep(520, 0.35);
+    if (navigator.vibrate) navigator.vibrate([250, 150, 250]);
+
+    if (isMobile()) return handoffToDialer(number);
+
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error("unsupported");
+      stream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 } }, audio: true });
+      const v = document.getElementById("call-video");
+      if (v) v.srcObject = stream;
+      startTick("🟢 LIVE — Video Connected");
+    } catch (err) {
+      const wrap = document.getElementById("call-video-wrap");
+      if (wrap) wrap.style.display = "none";
+      startTick("⚠️ Camera blocked — Audio-only mode");
+    }
+  }
+
+  return { open, openVideo, close, hangup };
 })();

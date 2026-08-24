@@ -270,6 +270,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  const videoBtn = document.getElementById("video-call-btn");
+  if (videoBtn) {
+    videoBtn.addEventListener("click", () => {
+      if (window.CallUI && window.CallUI.openVideo) {
+        CallUI.openVideo("MediRescue Rescue Line", RESCUE_DISPLAY);
+      } else {
+        MR.toast("🎥 Video calling not supported on this page", "warn");
+      }
+    });
+  }
+
   const typeSel = document.getElementById("sos-type");
   typeSel.innerHTML = EMERGENCY_TYPES.map((t) => `<option>${t}</option>`).join("");
 
