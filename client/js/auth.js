@@ -74,15 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => (window.location.href = "dashboard.html"), 250);
   });
 
-  const demoBtn = document.getElementById("demo-login");
-  if (demoBtn) {
-    demoBtn.addEventListener("click", () => {
-      localStorage.setItem("mr_demo", "1");
-      localStorage.setItem("mr_user", JSON.stringify({ name: "Demo User", email: "demo@medirescue.ai" }));
-      window.location.href = "dashboard.html";
-    });
-  }
-
   if (MR.user) {
     const hint = document.getElementById("auth-hint");
     if (hint) hint.textContent = `Already logged in as ${MR.user.name}. Go to dashboard →`;

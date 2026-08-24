@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Ambulance Request &amp; Live Tracking â€” MediRescue AI</title>
+  <title>Ambulance Request &amp; Live Tracking — MediRescue AI</title>
   <meta name="description" content="Request Basic, BLS, ALS or Neonatal ambulances with GPS pickup, driver details and live status tracking." />
   <meta name="theme-color" content="#14213d" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -29,45 +29,45 @@
   <main class="container" id="main">
     <div class="page-head">
       <h1><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h11v8H3z"/><path d="M14 11h4l3 3v2h-7v-5Z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><path d="M6 11h4M8 9v4"/></svg>Ambulance Request System</h1>
-      <p>Select ambulance type â†’ share pickup location â†’ get assigned unit with live status tracking.</p>
+      <p>Select ambulance type → share pickup location → get assigned unit with live status tracking.</p>
     </div>
 
     <section id="request-section" class="card">
-      <h3 style="font-size:1.05rem;margin-bottom:.8rem">1ï¸âƒ£ Choose Ambulance Type</h3>
+      <h3 style="font-size:1.05rem;margin-bottom:.8rem">1️⃣ Choose Ambulance Type</h3>
       <div class="chips" id="amb-type-chips">
-        <button class="chip selected" data-type="">ðŸ†˜ Any Available</button>
-        <button class="chip" data-type="Basic">ðŸš Basic (Patient Transport)</button>
-        <button class="chip" data-type="BLS">ðŸ§° BLS (Basic Life Support)</button>
-        <button class="chip" data-type="ALS">ðŸ’‰ ALS (Advanced Life Support)</button>
-        <button class="chip" data-type="Neonatal">ðŸ‘¶ Neonatal</button>
+        <button class="chip selected" data-type="">🆘 Any Available</button>
+        <button class="chip" data-type="Basic">🚐 Basic (Patient Transport)</button>
+        <button class="chip" data-type="BLS">🧰 BLS (Basic Life Support)</button>
+        <button class="chip" data-type="ALS">💉 ALS (Advanced Life Support)</button>
+        <button class="chip" data-type="Neonatal">👶 Neonatal</button>
       </div>
 
-      <h3 style="font-size:1.05rem;margin:1.4rem 0 .8rem">2ï¸âƒ£ Emergency Type &amp; Pickup Location</h3>
+      <h3 style="font-size:1.05rem;margin:1.4rem 0 .8rem">2️⃣ Emergency Type &amp; Pickup Location</h3>
       <div class="grid grid-2" style="gap:.9rem">
         <div class="form-group">
           <label for="em-type">Emergency Type</label>
           <select id="em-type">
-            <option>ðŸš¨ Accident</option>
-            <option>â¤ï¸ Heart Emergency</option>
-            <option>ðŸ©¸ Blood Loss</option>
-            <option>ðŸ”¥ Burn Injury</option>
-            <option>ðŸ§  Stroke</option>
-            <option>ðŸ¤• Other Emergency</option>
+            <option>🚨 Accident</option>
+            <option>❤️ Heart Emergency</option>
+            <option>🩸 Blood Loss</option>
+            <option>🔥 Burn Injury</option>
+            <option>🧠 Stroke</option>
+            <option>🤕 Other Emergency</option>
           </select>
         </div>
         <div class="form-group">
           <label>Pickup Location</label>
-          <button id="use-gps" class="btn btn-teal btn-block" type="button">ðŸ“ Use My Current GPS Location</button>
-          <p id="pickup-status" style="font-size:.82rem;color:var(--muted);margin-top:.35rem">No location set â€” required to dispatch.</p>
+          <button id="use-gps" class="btn btn-teal btn-block" type="button">📍 Use My Current GPS Location</button>
+          <p id="pickup-status" style="font-size:.82rem;color:var(--muted);margin-top:.35rem">No location set — required to dispatch.</p>
         </div>
       </div>
 
-      <button id="request-btn" class="btn btn-primary btn-lg btn-block" style="margin-top:.6rem">ðŸš¨ Request Ambulance Now</button>
+      <button id="request-btn" class="btn btn-primary btn-lg btn-block" style="margin-top:.6rem">🚨 Request Ambulance Now</button>
     </section>
 
     <section id="tracking-section" class="card" style="display:none;margin-top:1.5rem">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap">
-        <h3 style="font-size:1.05rem">ðŸ›°ï¸ Live Tracking â€” <span id="req-id"></span></h3>
+        <h3 style="font-size:1.05rem">🛰️ Live Tracking — <span id="req-id"></span></h3>
         <span class="badge badge-red" id="req-status-badge">ASSIGNED</span>
       </div>
 
@@ -75,32 +75,32 @@
 
       <div class="map-wrap" style="margin:.4rem 0 1.2rem">
         <div id="amb-map" role="application" aria-label="Live ambulance tracking map"></div>
-        <div id="amb-eta" class="badge badge-red" style="position:absolute;top:.7rem;left:.7rem;z-index:500;box-shadow:var(--shadow)">ðŸ›°ï¸ Live trackingâ€¦</div>
+        <div id="amb-eta" class="badge badge-red" style="position:absolute;top:.7rem;left:.7rem;z-index:500;box-shadow:var(--shadow)">🛰️ Live tracking…</div>
       </div>
 
       <div class="grid grid-2" style="gap:1rem;align-items:start">
         <div class="card sub-card">
-          <h4 style="font-size:.95rem;margin-bottom:.7rem">ðŸ‘¨â€âœˆï¸ Assigned Driver &amp; Unit</h4>
-          <div class="list-item"><span><b id="drv-name">â€”</b><br/><small style="color:var(--muted)" id="drv-phone">â€”</small></span><span class="badge badge-navy" id="drv-unit">â€”</span></div>
+          <h4 style="font-size:.95rem;margin-bottom:.7rem">👨‍✈️ Assigned Driver &amp; Unit</h4>
+          <div class="list-item"><span><b id="drv-name">—</b><br/><small style="color:var(--muted)" id="drv-phone">—</small></span><span class="badge badge-navy" id="drv-unit">—</span></div>
           <div style="display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap">
-            <a id="call-driver" href="#" class="btn btn-sm btn-teal">ðŸ“ž Call Driver</a>
-            <a id="track-map" href="#" target="_blank" rel="noopener" class="btn btn-sm btn-navy">ðŸ—ºï¸ Open Route</a>
+            <a id="call-driver" href="#" class="btn btn-sm btn-teal">📞 Call Driver</a>
+            <a id="track-map" href="#" target="_blank" rel="noopener" class="btn btn-sm btn-navy">🗺️ Open Route</a>
           </div>
         </div>
         <div class="card sub-card">
-          <h4 style="font-size:.95rem;margin-bottom:.7rem">ðŸ“‹ Trip Timeline</h4>
+          <h4 style="font-size:.95rem;margin-bottom:.7rem">📋 Trip Timeline</h4>
           <div class="timeline" id="amb-timeline"></div>
         </div>
       </div>
 
       <div style="display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap">
-        <button id="advance-btn" class="btn btn-primary" type="button">â­ï¸ Advance Status (demo)</button>
-        <a href="hospitals.html" class="btn btn-ghost">ðŸ¥ Choose Destination Hospital</a>
+        <button id="advance-btn" class="btn btn-primary" type="button">⏭️ Advance Status (demo)</button>
+        <a href="hospitals.html" class="btn btn-ghost">🏥 Choose Destination Hospital</a>
       </div>
     </section>
 
     <section class="card" style="margin-top:1.5rem">
-      <h3 style="font-size:1.05rem;margin-bottom:.8rem">ðŸš‘ Available Fleet</h3>
+      <h3 style="font-size:1.05rem;margin-bottom:.8rem">🚑 Available Fleet</h3>
       <div id="fleet-list"></div>
     </section>
   </main>

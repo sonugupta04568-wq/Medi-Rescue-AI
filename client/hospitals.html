@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Nearby Hospital Finder â€” MediRescue AI</title>
+  <title>Nearby Hospital Finder — MediRescue AI</title>
   <meta name="description" content="Live map of nearby hospitals sorted by distance with emergency availability, directions and one-tap call." />
   <meta name="theme-color" content="#14213d" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -29,21 +29,21 @@
   <main class="container" id="main">
     <div class="page-head">
       <h1><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6v4M10 8h4"/><path d="M14.5 4h-5l-.5 2h6l-.5-2Z"/><path d="M5 10h14v10H5z"/><path d="M9 20v-4h6v4"/></svg>Nearby Hospital Finder</h1>
-      <p id="loc-status">ðŸ“ Detecting your locationâ€¦</p>
+      <p id="loc-status">📍 Detecting your location…</p>
     </div>
 
     <div style="display:flex;gap:.7rem;margin-bottom:1rem;flex-wrap:wrap">
-      <button id="refresh-loc" class="btn btn-sm btn-primary">ðŸ“ Refresh My Location</button>
-      <a href="ambulance.html" class="btn btn-sm btn-navy">ðŸš‘ Request Ambulance Instead</a>
+      <button id="refresh-loc" class="btn btn-sm btn-primary">📍 Refresh My Location</button>
+      <a href="ambulance.html" class="btn btn-sm btn-navy">🚑 Request Ambulance Instead</a>
       <span id="hospital-count" style="align-self:center;color:var(--muted);font-size:.9rem"></span>
     </div>
 
     <section class="card" style="margin-bottom:1.2rem">
       <h3 style="font-size:1.05rem;margin-bottom:.8rem">Filter by City</h3>
       <div class="chips" id="city-chips">
-        <button class="chip selected" data-city="All">ðŸ¥ All Hospitals</button>
-        <button class="chip" data-city="Delhi">ðŸ™ï¸ Delhi</button>
-        <button class="chip" data-city="Noida">ðŸŒ† Noida</button>
+        <button class="chip selected" data-city="All">🏥 All Hospitals</button>
+        <button class="chip" data-city="Delhi">🏙️ Delhi</button>
+        <button class="chip" data-city="Noida">🌆 Noida</button>
       </div>
     </section>
 
